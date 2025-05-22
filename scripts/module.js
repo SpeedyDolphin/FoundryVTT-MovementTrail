@@ -7,7 +7,7 @@ Hooks.once('ready', async function() {
 });
 
 //const token = canvas.tokens.controlled[0];
-let combatents = {};
+let combatants = {};
 const container = new PIXI.Container();
 let containerId = 0
 const layer = canvas.layers.find((l) => l.options?.name === "grid");
@@ -22,11 +22,11 @@ Hooks.on("updateToken", async (token, changes, options, userId) => {
     if ("x" in changes || "y" in changes) {
       const x = changes.x ?? token.x;
       const y = changes.y ?? token.y; 
-      const combatent = combatents[token.actor.id];
+      const combatant = combatants[token.actor.id];
       
-      // note: falling back on init_coordinate may be a bit reduntant.  
+      // note: falling back on init_coordinate may be a bit redundant.  
       let movement = canvas.grid.measurePath(
-          [combatent.trail.at(-1)?.pixel ?? combatent.init_coordinate.pixel, { x, y }], 
+          [combatant.trail.at(-1)?.pixel ?? combatant.init_coordinate.pixel, { x, y }], 
           { gridSpaces: true });
           
       const newCoordinate = {
@@ -37,49 +37,49 @@ Hooks.on("updateToken", async (token, changes, options, userId) => {
       };
       
       //backtracking
-      if(combatent.trail.length >= 2){
+      if(combatant.trail.length >= 2){
           //Standard backtracking
-          console.log("Backtacking Check")
-          console.log(combatent.trail.at(-2).grid);
+          console.log("Backtracking Check")
+          console.log(combatant.trail.at(-2).grid);
           console.log(newCoordinate.grid)
-          if (combatent.trail.at(-2).grid.x === newCoordinate.grid.x && combatent.trail.at(-2).grid.y === newCoordinate.grid.y)
+          if (combatant.trail.at(-2).grid.x === newCoordinate.grid.x && combatant.trail.at(-2).grid.y === newCoordinate.grid.y)
           {
-              let discarded = combatent.trail.pop();
-              combatent.total_moved -= discarded.distance;
-              discarded = combatent.trail.pop();
-              combatent.total_moved -= discarded.distance;
+              let discarded = combatant.trail.pop();
+              combatant.total_moved -= discarded.distance;
+              discarded = combatant.trail.pop();
+              combatant.total_moved -= discarded.distance;
           }
           //Backtracking diagonals 
-          else if(combatent.trail.at(-1).diagonal && isAdjacent(combatent.trail.at(-2), newCoordinate))
+          else if(combatant.trail.at(-1).diagonal && isAdjacent(combatant.trail.at(-2), newCoordinate))
           {
-              let discarded = combatent.trail.pop();
-              combatent.total_moved -= discarded.distance;
+              let discarded = combatant.trail.pop();
+              combatant.total_moved -= discarded.distance;
           }
       }
           
-      // check to see if the movement is eligable for merging due to diagonals ex  ⇑⇒ -> ⇗
-      if (combatent.trail.at(-2)?.pixel != undefined){
+      // check to see if the movement is eligible for merging due to diagonals ex  ⇑⇒ -> ⇗
+      if (combatant.trail.at(-2)?.pixel != undefined){
           let diagonalCheck = canvas.grid.measurePath(
-              [combatent.trail.at(-2)?.pixel ?? combatent.init_coordinate.pixel, { x, y }], 
+              [combatant.trail.at(-2)?.pixel ?? combatant.init_coordinate.pixel, { x, y }], 
               { gridSpaces: true });
               
-          if(diagonalCheck.diagonals > 0 && diagonalCheck.cost == movement.cost && !combatent.trail.at(-1).diagonal){
-              let discarded = combatent.trail.pop();
-              combatent.total_moved -= discarded.distance;
+          if(diagonalCheck.diagonals > 0 && diagonalCheck.cost == movement.cost && !combatant.trail.at(-1).diagonal){
+              let discarded = combatant.trail.pop();
+              combatant.total_moved -= discarded.distance;
               newCoordinate.diagonal = true;  
           }
       }
 
-      combatent.trail.push(newCoordinate);
-      combatent.total_moved += movement.distance; 
+      combatant.trail.push(newCoordinate);
+      combatant.total_moved += movement.distance; 
 
       console.log(`Token moved to: ${JSON.stringify(newCoordinate)}`);
-      console.log(`Total movement used: ${combatent.total_moved}`)
-      console.log(combatents);
+      console.log(`Total movement used: ${combatant.total_moved}`)
+      console.log(combatants);
       
       //render
       container.removeChildren();
-      drawTrail(combatent.trail);
+      drawTrail(combatant.trail);
       containerId += 1;
       const currContainer = containerId;  
       
@@ -89,7 +89,7 @@ Hooks.on("updateToken", async (token, changes, options, userId) => {
       }
     }
   } catch (err) {
-    console.log("An error occurred in the macro Athena's Marco Shenagigans")
+    console.log("An error occurred in the macro Athena's Marco Shenanigans")
     throw err 
   }
 });
@@ -108,7 +108,7 @@ Hooks.on("updateCombat", async (combat, changed) => {
             'diagonal': false
          }
     
-    combatents[actor._id] = {
+    combatants[actor._id] = {
         "init_coordinate" : init_coordinate,
         'total_moved': 0, 
         'trail':[init_coordinate]
@@ -124,7 +124,7 @@ function drawTrail(trail){
      }
      console.log(`Total distance ${distance}`);
 }
-//x, y should be the coorindates for the top left corner 
+//x, y should be the coordinates for the top left corner 
 function drawSquare(x, y, color, number, container){
     const gridSize = canvas.grid.size
     
@@ -139,7 +139,7 @@ function drawSquare(x, y, color, number, container){
     square.y = y + gridSize*.03;
     container.addChild(square);
     
-    // Add lable 
+    // Add label 
     if (number){
         //Make Text
         const text = new PIXI.Text(number, {
@@ -158,7 +158,7 @@ function drawSquare(x, y, color, number, container){
     
 }
 
-// Helper fuctions
+// Helper functions
 function pointToGrid(x_pixel, y_pixel) {
   const gridSize = canvas.grid.size;
   const x = Math.floor(x_pixel / gridSize);
