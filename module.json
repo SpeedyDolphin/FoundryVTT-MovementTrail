@@ -1,20 +1,19 @@
 {
-  "id": "module",
-  "title": "New Module",
-  "description": "",
+  "id": "athenas-movement-trail",
+  "title": "Athena's Movement Trail",
+  "description": "A module that adds a movement trail to tokens during active combat",
   "version": "#{VERSION}#",
   "library": "false",
   "manifestPlusVersion": "1.2.0",
   "compatibility": {
-    "minimum": 10,
-    "verified": 10,
-    "maximum": 11
+    "minimum": 12,
+    "verified": 12.331
   },
   "authors": [
     {
-      "name": "The League of Extraordinary FVTT Developers",
-      "url": "https://github.com/League-of-Foundry-Developers",
-      "discord": "discordID#0001"
+      "name": "SpeedyDolphin",
+      "url": "https://github.com/SpeedyDolphin/FoundryVTT-MovementTrail",
+      "discord": "speedy_dolphin"
     }
   ],
   "relationships": {
