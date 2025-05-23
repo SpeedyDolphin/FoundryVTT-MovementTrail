@@ -2,7 +2,7 @@
   "id": "athenas-movement-trail",
   "title": "Athena's Movement Trail",
   "description": "A module that adds a movement trail to tokens during active combat",
-  "version": "#{VERSION}#",
+  "version": "0.1.0",
   "library": "false",
   "manifestPlusVersion": "1.2.0",
   "compatibility": {

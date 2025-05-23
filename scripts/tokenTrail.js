@@ -21,7 +21,7 @@ export function registerCombatant(token, actorId) {
    }
 }
 
-export async function updateTrail(combatant, newCoordinate) {
+export async function updateTrail(combatant, newCoordinate, userId){
     //check if the token is being tracked add it if not
     //TODO clear the data from the previous round at top of the round if the token is not in the combat tracker
     //if (combatants[combatant.actor.id] == undefined){
@@ -41,7 +41,7 @@ export async function updateTrail(combatant, newCoordinate) {
       console.log(combatants);
       
       //render
-      renderCombatantTrail(combatant.actor.id, combatant.trail);      
+      renderCombatantTrail(combatant.actor.id, combatant.trail, userId);      
 }
 
 function backtracking(combatant, newCoordinate){

@@ -5,10 +5,10 @@ const subContainers = {};
 
 const delay = 3000; // 3 seconds
 
-export async function renderCombatantTrail(combatantId, trail){
+export async function renderCombatantTrail(combatantId, trail, userId){
     //adds a unique container for each combatant if it doesn't exist
     if (subContainers[combatantId] === undefined){
-        subContainers[combatantId] = {'container' : new PIXI.Container(), 'version':0};
+        subContainers[combatantId] = {'container' : new PIXI.Container(), 'version':0, 'color': getUserColor(combatantId, userId)};
         mainContainer.addChild(subContainers[combatantId]);
     }
     //remove the previous container's children
@@ -66,5 +66,15 @@ function drawSquare(x, y, color, number, container){
         text.anchor.set(0.5)
         container.addChild(text);
     }
-    
+}
+
+function getUserColor(tokenId, userId) {
+    //get the user of the token via the main character of the token
+    let owningUsers = game.users.players.filter(u => u.character?.id === tokenId);
+    if (owningUsers.length > 0) {
+        return owningUsers[0].color;
+    }
+    //gets color of the user who moved the token
+    const user = game.users.get(userId);
+    return user.color;
 }

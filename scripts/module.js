@@ -9,14 +9,15 @@ Hooks.once('init', async function() {
     restricted: true,
     editable: [{ key: "KeyT" }],
     onDown: () => {
-      const token = canvas.tokens.controlled[0];
-      if (token) {
-        const combatant = combatants[token.actor.id];
-        if (combatant) {
-          container.removeChildren();
-          drawTrail(combatant.trail);
-        }
-      }
+      // const token = canvas.tokens.controlled[0];
+      // if (token) {
+      //   const combatant = combatants[token.actor.id];
+      //   if (combatant) {
+          
+      //   }
+      // }
+      console.log("Athena's Movement Trail | Keybinding Triggered");
+      console.log("I will one day do something :3");
     },
   });
 });
@@ -40,7 +41,7 @@ Hooks.on("updateToken", async (token, changes, options, userId) => {
         'diagonal': movement.diagonals > 0  
       };
       
-      updateTrail(combatant, newCoordinate);
+      updateTrail(combatant, newCoordinate, userId);
   }
 });
 
