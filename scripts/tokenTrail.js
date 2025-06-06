@@ -1,5 +1,5 @@
 
-import { renderCombatantTrail} from "./render";
+import { renderCombatantTrail} from "./render.js";
 
 export let combatants = {}; //TODO FIX so it does not need to be global
 
@@ -21,16 +21,30 @@ export function registerCombatant(token, actorId) {
    }
 }
 
-export async function updateTrail(combatant, newCoordinate, userId){
+export async function updateTrail(combatant, changes, userId){
     //check if the token is being tracked add it if not
     //TODO clear the data from the previous round at top of the round if the token is not in the combat tracker
     //if (combatants[combatant.actor.id] == undefined){
     //    registerCombatant(combatant, combatant.actor.id);
     //}
+    const x = changes.x ?? token.x;
+    const y = changes.y ?? token.y; 
+      
+      // note: falling back on init_coordinate may be a bit redundant.  
+    let movement = canvas.grid.measurePath(
+        [combatant.trail.at(-1)?.pixel ?? combatant.init_coordinate.pixel, { x, y }], 
+        { gridSpaces: true });
+          
+    const newCoordinate = {
+        'pixel': { 'x': x, 'y': y },
+        'grid': pointToGrid(x, y),
+        'distance': movement.distance, 
+        'diagonal': movement.diagonals > 0  
+    };
     
     if(combatant.trail.length >= 2){
         backtracking(combatant, newCoordinate);
-        mergeDiagonals(combatant, newCoordinate);
+        mergeDiagonals(combatant, newCoordinate, movement);
     }
           
       combatant.trail.push(newCoordinate);
@@ -65,7 +79,7 @@ function backtracking(combatant, newCoordinate){
 }
 
 // check to see if the movement is eligible for merging due to diagonals ex  ⇑⇒ -> ⇗
-function mergeDiagonals(combatant, newCoordinate){
+function mergeDiagonals(combatant, newCoordinate, movement){
     let diagonalCheck = canvas.grid.measurePath(
             [combatant.trail.at(-2)?.pixel ?? combatant.init_coordinate.pixel, { x, y }], 
             { gridSpaces: true });
@@ -78,7 +92,8 @@ function mergeDiagonals(combatant, newCoordinate){
 }
 
 // Helper functions
-function pointToGrid(x_pixel, y_pixel) {
+//refactor code so that it does not need to be used in module.js
+export function pointToGrid(x_pixel, y_pixel) {
   const gridSize = canvas.grid.size;
   const x = Math.floor(x_pixel / gridSize);
   const y = Math.floor(y_pixel / gridSize);

@@ -1,9 +1,12 @@
 const mainContainer = new PIXI.Container();
-const layer = canvas.layers.find((l) => l.options?.name === "grid");
-layer.addChild(mainContainer)
 const subContainers = {};
 
 const delay = 3000; // 3 seconds
+
+export function renderInit(){
+    const layer = canvas.layers.find((l) => l.options?.name === "grid");
+    layer.addChild(mainContainer)
+}
 
 export async function renderCombatantTrail(combatantId, trail, userId){
     //adds a unique container for each combatant if it doesn't exist
