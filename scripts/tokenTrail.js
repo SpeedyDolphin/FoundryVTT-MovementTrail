@@ -1,24 +1,22 @@
 
 import { renderCombatantTrail} from "./render.js";
 
-export let combatants = {}; //TODO FIX so it does not need to be global
+let combatants = {};
 
 //This function adds a new token to the tracker or clears data from the previous round
-export function registerCombatant(token, actorId) {
-    //set position at start of the round
-    console.log(`${actorId}'s Position (${token.x},${token.y})`);
-    const init_coordinate = {
-            'pixel': {'x': token.x,'y': token.y},
-            'grid' : pointToGrid(token.x, token.y),
-            'distance': 0, 
-            'diagonal': false
-         }
-    
-    combatants[actorId] = {
-        "init_coordinate" : init_coordinate,
-        'total_moved': 0, 
-        'trail':[init_coordinate]
-   }
+export function registerCombatant(tokenId, actorId, round) {
+    //Sets the combatant's initial position on it's turn. Does not update if moving backwards in the turn tracker 
+    if (combatants[tokenId] !== undefined || combatants[tokenId].round < round) {
+        console.log(`${actorId}'s Position (${token.x},${token.y})`);
+       
+        combatants[tokenId] = {
+            "init_coordinate" : getInitCoordinate(tokenId),
+            'actorId': actorId,
+            'total_moved': 0, 
+            'trail':[init_coordinate],
+            'round': round
+        } 
+    }
 }
 
 export async function updateTrail(combatant, changes, userId){
@@ -92,8 +90,7 @@ function mergeDiagonals(combatant, newCoordinate, movement){
 }
 
 // Helper functions
-//refactor code so that it does not need to be used in module.js
-export function pointToGrid(x_pixel, y_pixel) {
+function pointToGrid(x_pixel, y_pixel) {
   const gridSize = canvas.grid.size;
   const x = Math.floor(x_pixel / gridSize);
   const y = Math.floor(y_pixel / gridSize);
@@ -107,4 +104,14 @@ function isAdjacent(coordA, coordB) {
   // Adjacent means within 1 square in any direction (including diagonals),
   // but not the same square.
   return (dx <= 1 && dy <= 1) && !(dx === 0 && dy === 0);
+}
+
+function getInitCoordinate(tokenId) {
+  const token = canvas.tokens.get(tokenId);
+  return {
+    'pixel': { 'x': token.x, 'y': token.y },
+    'grid': pointToGrid(token.x, token.y),
+    'distance': 0,
+    'diagonal': false
+  };
 }

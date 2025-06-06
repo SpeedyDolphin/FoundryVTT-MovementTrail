@@ -15,6 +15,6 @@
     }
   ],
   "esmodules":[
-    "scripts/module.js"
+    "scripts/registerHooks_movementTrail.js"
   ]
 }

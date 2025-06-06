@@ -1,4 +1,4 @@
-import { registerCombatant, updateTrail, combatants, pointToGrid } from "./tokenTrail.js";
+import { registerCombatant, updateTrail, combatants} from "./tokenTrail.js";
 import { renderInit } from "./render.js";
 
 Hooks.once('init', async function() {
@@ -37,12 +37,8 @@ Hooks.on("updateToken", async (token, changes, options, userId) => {
   }
 });
 
-
 Hooks.on("updateCombat", async (combat, changed) => {
     console.log("Athena's Movement Trail | Update Combat Hook Triggered");
-    const actor = combat.combatant.actor;
-    const token = canvas.tokens.placeables.find(t => t.actor?.id === actor._id);
-    
-    registerCombatant(token, actor._id);
+    registerCombatant(combat.combatant.token.id, combat.combatant.actor.id, combat.round);
 });
 
