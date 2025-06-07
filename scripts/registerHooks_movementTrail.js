@@ -28,8 +28,7 @@ Hooks.on("updateToken", async (token, changes, options, userId) => {
     console.log("Athena's Movement Trail | Update Token Hook Triggered");    
     // Check if position changed
     if ("x" in changes || "y" in changes) {
-      const combatant = combatants[token.actor.id];
-      updateTrail(combatant, changes, userId);
+      updateTrail(token.id, changes, userId);
   }
 });
 
