@@ -1,4 +1,4 @@
-import { registerCombatant, updateTrail, combatants} from "./tokenTrail.js";
+import { registerCombatant, updateTrail, combatants, showTrail} from "./tokenTrail.js";
 import { renderInit } from "./render.js";
 
 Hooks.once('init', async function() {
@@ -10,15 +10,11 @@ Hooks.once('init', async function() {
     restricted: true,
     editable: [{ key: "KeyV" }],
     onDown: () => {
-      // const token = canvas.tokens.controlled[0];
-      // if (token) {
-      //   const combatant = combatants[token.actor.id];
-      //   if (combatant) {
-          
-      //   }
-      // }
+      const token = canvas.tokens.controlled[0];
+      if (token && game.combat.active === true) {
+          showTrail(token.id);
+      }
       console.log("Athena's Movement Trail | Keybinding Triggered");
-      console.log("I will one day do something :3");
     },
   });
 });

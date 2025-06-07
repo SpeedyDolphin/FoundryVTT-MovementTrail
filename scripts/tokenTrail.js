@@ -55,6 +55,9 @@ export async function updateTrail(combatant, changes, userId){
       //render
       renderCombatantTrail(combatant.actor.id, combatant.trail, userId);      
 }
+export function showTrail(tokenId){
+    renderCombatantTrail(tokenId, combatants[tokenId].trail, game.user.id);
+}
 
 function backtracking(combatant, newCoordinate){
     //Standard backtracking
