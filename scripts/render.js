@@ -56,7 +56,7 @@ function drawSquare(x, y, color, number, container){
     if (number){
         //Make Text
         const text = new PIXI.Text(number, {
-          fontFamily: "Brush Script MT",
+          fontFamily: game.settings.get("athenas-movement-trail", "font"),
           fontSize: 24,
           fill: 0xffffff,      // White text
           align: "center"

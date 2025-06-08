@@ -4,19 +4,8 @@ import { renderInit } from "./render.js";
 Hooks.once('init', async function() {
   console.log("Athena's Movement Trail | Initializing");
 
-  game.keybindings.register("athenas-movement-trail", "showTrail", {
-    name: "Show Movement Trail",
-    hint: "Shows the movement trail of the selected token.",
-    restricted: true,
-    editable: [{ key: "KeyV" }],
-    onDown: () => {
-      const token = canvas.tokens.controlled[0];
-      if (token && game.combat.active === true) {
-          showTrail(token.id);
-      }
-      console.log("Athena's Movement Trail | Keybinding Triggered");
-    },
-  });
+  setKeybindings();
+  registerSettings();
 });
 
 Hooks.once("canvasReady", async () => {
@@ -37,3 +26,48 @@ Hooks.on("updateCombat", async (combat, changed) => {
     registerCombatant(combat.combatant.token.id, combat.combatant.actor.id, combat.round);
 });
 
+
+
+
+
+function setKeybindings(){
+  game.keybindings.register("athenas-movement-trail", "showTrail", {
+    name: "Show Movement Trail",
+    hint: "Shows the movement trail of the selected token.",
+    restricted: true,
+    editable: [{ key: "KeyV" }],
+    onDown: () => {
+      const token = canvas.tokens.controlled[0];
+      if (token && game.combat.active === true) {
+          showTrail(token.id);
+      }
+      console.log("Athena's Movement Trail | Keybinding Triggered");
+    },
+  });
+}
+
+function registerSettings(){
+
+  // Font Setting
+  game.settings.register("athenas-movement-trail", "font", {
+  name: "Font",
+  hint: "The font used for the movement trail text.",
+  scope: "client",         // "world" or "client"
+  config: true,           // Show in the settings UI
+  type: String,
+  default: "Brush Script MT",
+  choices: {
+    "Arial (sans-serif)" : "Arial", 
+    "Verdana": "Verdana",
+    "Tahoma": "Tahoma",
+    "Trebuchet MS": "Trebuchet MS",
+    "Times New Roman": "Times New Roman",
+    "Georgia": "Georgia",
+    "Garamond": "Garamond",
+    "Courier New": "Courier New",
+    "Brush Script MT": "Brush Script MT"
+  },
+  
+});
+
+}
