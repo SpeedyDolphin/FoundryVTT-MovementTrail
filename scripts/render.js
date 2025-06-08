@@ -71,8 +71,10 @@ function drawSquare(x, y, color, number, container){
 }
 
 function getUserColor(tokenId, userId) {
+    const actorId = canvas.tokens.get(tokenId)?.actor?.id;
+    
     //get the user of the token via the main character of the token
-    let owningUsers = game.users.players.filter(u => u.character?.id === tokenId);
+    let owningUsers = game.users.players.filter(u => u.character?.id === actorId);
     if (owningUsers.length > 0) {
         return owningUsers[0].color;
     }
