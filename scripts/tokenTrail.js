@@ -2,12 +2,12 @@
 import { renderCombatantTrail} from "./render.js";
 
 let combatants = {};
-let untrackedCombatants = {}; // This will hold combatants that are not currently in the combat tracker but have moved. Resets at top of the round.
+let untrackedCombatants = new Set(); // This will hold the ids of combatants that are not currently in the combat tracker but have moved. Resets at top of the round.
 
 //This function adds a new token to the tracker or clears data from the previous round
 export function registerCombatant(tokenId, actorId, round) {
     //Sets the combatant's initial position on it's turn. Does not update if moving backwards in the turn tracker 
-    if (combatants[tokenId].round < round) {
+    if (combatants[tokenId] === undefined || combatants[tokenId].round < round) {
         
         combatants[tokenId] = {
             "init_coordinate" : getInitCoordinate(tokenId),
@@ -19,18 +19,13 @@ export function registerCombatant(tokenId, actorId, round) {
     }
 }
 function offTurn_registerCombatant(tokenId) {
-    if(isCombatantInCombatTracker(tokenId)){
+    console.log(`Registering off-turn combatant: ${tokenId}`);
+    registerCombatant(tokenId, canvas.tokens.get(tokenId).actor.id, game.combat.round); 
+
+    if(!isCombatantInCombatTracker(tokenId)){
         // If the token is in the combat tracker, we register it normally
-        registerCombatant(tokenId, canvas.tokens.get(tokenId).actor.id, game.combat.round); 
-    }
-    else{
-        untrackedCombatants[tokenId] = {
-            "init_coordinate" : getInitCoordinate(tokenId),
-            'actorId': canvas.tokens.get(tokenId).actor.id,
-            'total_moved': 0, 
-            'trail':[getInitCoordinate(tokenId)],
-            'round': game.combat.round
-        } 
+        console.log(`Token ${tokenId} is not in the combat tracker, adding to untrackedCombatants.`);
+        untrackedCombatants.add(tokenId);
     }
 }
 function isCombatantInCombatTracker(tokenId) {
@@ -38,8 +33,8 @@ function isCombatantInCombatTracker(tokenId) {
     return game.combat.combatants.some(c => c.token.id === tokenId);
 }
 
-
 export async function updateTrail(tokenId, changes, userId, rulerMovement = false) {
+    console.log("updateTrail called")
     //check if the token is being tracked add it if not
     //TODO clear the data from the previous round at top of the round if the token is not in the combat tracker
     if (combatants[tokenId] === undefined){
@@ -55,6 +50,9 @@ export async function updateTrail(tokenId, changes, userId, rulerMovement = fals
     }
     else if (movementData.distance !== canvas.scene.grid.distance){
         // This means that the token is not moving to an adjacent square, so we ignore the movement
+        combatants[tokenId].trail.push(movementData);
+        combatants[tokenId].trail.at(-1).cost = 0; // Set the cost to 0 for non-adjacent movements
+        backtracking(tokenId);
         return
     }
     
@@ -62,19 +60,22 @@ export async function updateTrail(tokenId, changes, userId, rulerMovement = fals
     combatants[tokenId].total_moved += movementData.cost; 
 
      
-    backtracking(combatant);
-    mergeDiagonals(combatant, movementData, movement);
+    backtracking(tokenId); 
+    mergeDiagonals(tokenId);
 
         
     console.log(`Token moved to: ${JSON.stringify(movementData)}`);
-    console.log(`Total movement used: ${combatant.total_moved}`)
+    console.log(`Total movement used: ${combatants[tokenId].total_moved}`)
     console.log(combatants);
       
     //render
-    renderCombatantTrail(combatant.actor.id, combatant.trail, userId); 
+    renderCombatantTrail(tokenId, combatants[tokenId].trail, userId); 
 
 }
 export function showTrail(tokenId){
+    if (combatants[tokenId] === undefined) {
+        return;
+    }
     renderCombatantTrail(tokenId, combatants[tokenId].trail, game.user.id);
 }
 function getMovementData(changes, tokenId){
@@ -93,36 +94,30 @@ function getMovementData(changes, tokenId){
     };
 }
 
-function backtracking(combatant, newCoordinate){
-    //Standard backtracking
-    console.log("Backtracking Check")
-    console.log(combatant.trail.at(-2).grid);
-    console.log(newCoordinate.grid)
-    if (combatant.trail.at(-2).grid.x === newCoordinate.grid.x && combatant.trail.at(-2).grid.y === newCoordinate.grid.y)
-    {
+function backtracking(combatantId){
+    const combatant = combatants[combatantId];
+    //Simple backtracking
+    if(combatant.trail.length >=3 && isSameCoordinate(combatant.trail.at(-3), combatant.trail.at(-1))) {
+        console.log("Backtracking True");
         let discarded = combatant.trail.pop();
-        combatant.total_moved -= discarded.distance;
+        combatant.total_moved -= discarded.cost;
         discarded = combatant.trail.pop();
-        combatant.total_moved -= discarded.distance;
-    }
-    //Backtracking diagonals 
-    else if(combatant.trail.at(-1).diagonal && isAdjacent(combatant.trail.at(-2), newCoordinate))
-    {
-        let discarded = combatant.trail.pop();
-        combatant.total_moved -= discarded.distance;
+        combatant.total_moved -= discarded.cost;
     }
 }
-
-// check to see if the movement is eligible for merging due to diagonals ex  ⇑⇒ -> ⇗
-function mergeDiagonals(combatant, newCoordinate, movement){
-    let diagonalCheck = canvas.grid.measurePath(
-            [combatant.trail.at(-2)?.pixel ?? combatant.init_coordinate.pixel, { x, y }], 
-            { gridSpaces: true });
-            
-    if(diagonalCheck.diagonals > 0 && diagonalCheck.cost == movement.cost && !combatant.trail.at(-1).diagonal){
-        let discarded = combatant.trail.pop();
-        combatant.total_moved -= discarded.distance;
-        newCoordinate.diagonal = true;  
+function mergeDiagonals(combatantId){
+    const combatant = combatants[combatantId];
+    while(combatants[combatantId].trail.length >= 3 && isAdjacent(combatant.trail.at(-1), combatant.trail.at(-3))){
+        combatant.total_moved  -= combatant.trail.at(-2).cost; // Remove the cost of the middle point
+        combatant.trail.splice(-2, 1); // Remove the middle point
+        
+        //NOTE: This diagonal field may be removed in the future, as it is not used in the current implementation.
+        if(isDiagonal(combatant.trail.at(-1), combatant.trail.at(-2))){
+            combatant.trail.at(-1).diagonal = true; // Mark the last point as diagonal
+        }
+        else {
+            combatant.trail.at(-1).diagonal = false; // Mark the last point as not diagonal
+        }
     }
 }
 
@@ -135,12 +130,21 @@ function pointToGrid(x_pixel, y_pixel) {
 }
 
 function isAdjacent(coordA, coordB) {
+  console.log(coordA)
+  console.log(coordB)  
   const dx = Math.abs(coordA.grid.x - coordB.grid.x);
   const dy = Math.abs(coordA.grid.y - coordB.grid.y);
 
   // Adjacent means within 1 square in any direction (including diagonals),
   // but not the same square.
   return (dx <= 1 && dy <= 1) && !(dx === 0 && dy === 0);
+}
+function isDiagonal(coordA, coordB) {
+  const dx = Math.abs(coordA.grid.x - coordB.grid.x);
+  const dy = Math.abs(coordA.grid.y - coordB.grid.y);
+
+  // Diagonal means exactly one square away in both x and y directions.
+  return (dx === 1 && dy === 1);
 }
 
 function getInitCoordinate(tokenId) {
@@ -149,6 +153,11 @@ function getInitCoordinate(tokenId) {
     'pixel': { 'x': token.x, 'y': token.y },
     'grid': pointToGrid(token.x, token.y),
     'distance': 0,
+    'cost': 0,
     'diagonal': false
   };
+}
+function isSameCoordinate(coordA, coordB) {
+    console.log(`Comparing coordinates: ${JSON.stringify(coordA)} and ${JSON.stringify(coordB)}`);
+    return coordA.grid.x === coordB.grid.x && coordA.grid.y === coordB.grid.y;
 }

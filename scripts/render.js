@@ -12,31 +12,30 @@ export async function renderCombatantTrail(combatantId, trail, userId){
     //adds a unique container for each combatant if it doesn't exist
     if (subContainers[combatantId] === undefined){
         subContainers[combatantId] = {'container' : new PIXI.Container(), 'version':0, 'color': getUserColor(combatantId, userId)};
-        mainContainer.addChild(subContainers[combatantId]);
+        mainContainer.addChild(subContainers[combatantId].container);
     }
     //remove the previous container's children
-    subContainers[combatantId].removeChildren().forEach(child => child.destroy({ children: true }));
+    subContainers[combatantId].container.removeChildren().forEach(child => child.destroy({ children: true }));
 
     //render the new trail
-    drawTrail(trail, subContainers[combatantId].container);
+    drawTrail(trail, subContainers[combatantId].container, subContainers[combatantId].color);
     subContainers[combatantId].version += 1;
     const currContainer = subContainers[combatantId].version;
 
     //cleanup the container after a delay
     await new Promise(resolve => setTimeout(resolve, delay));
     if (currContainer == subContainers[combatantId].version){
-        subContainers[combatantId].removeChildren().forEach(child => child.destroy({ children: true }));
+        subContainers[combatantId].container.removeChildren().forEach(child => child.destroy({ children: true }));
     }
 }
 
-function drawTrail(trail, container){
-    distance = 0
+function drawTrail(trail, container, color){
+    let cost = 0
     for (let i = 0; i < trail.length; i++){
-        distance += trail[i].distance ?? 0;
-        distance= Math.round(distance)
-        drawSquare(trail[i].pixel.x, trail[i].pixel.y, 0x03e2c8, String(distance), container) 
+        cost = Math.round(cost + trail[i].cost ?? 0); // rounding to avoid floating point issues
+        drawSquare(trail[i].pixel.x, trail[i].pixel.y, color, String(cost), container) 
      }
-     console.log(`Total distance ${distance}`);
+     console.log(`Total travel cost ${cost}`);
 }
 //x, y should be the coordinates for the top left corner 
 function drawSquare(x, y, color, number, container){

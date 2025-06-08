@@ -1,4 +1,4 @@
-import { registerCombatant, updateTrail, combatants, showTrail} from "./tokenTrail.js";
+import { registerCombatant, updateTrail, showTrail} from "./tokenTrail.js";
 import { renderInit } from "./render.js";
 
 Hooks.once('init', async function() {
