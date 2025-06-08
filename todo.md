@@ -8,3 +8,4 @@
         Use lib-wrapper to monkey patch the move token function on the ruler 
 - [X] Fix the user color selector. Currently it only uses the color of the user moving the token 
 - [ ] Edit behavior for tokens larger than 1 square
+- [ ] Hide movements done by dm

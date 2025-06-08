@@ -1,4 +1,4 @@
-import { registerCombatant, updateTrail, showTrail} from "./tokenTrail.js";
+import { registerCombatant, updateTrail, showTrail, resetUntracked} from "./tokenTrail.js";
 import { renderInit } from "./render.js";
 
 Hooks.once('init', async function() {
@@ -24,6 +24,11 @@ Hooks.on("updateToken", async (token, changes, options, userId) => {
 Hooks.on("updateCombat", async (combat, changed) => {
     console.log("Athena's Movement Trail | Update Combat Hook Triggered");
     registerCombatant(combat.combatant.token.id, combat.combatant.actor.id, combat.round);
+
+    if (changed.round) {
+        // Reset untracked combatants at the start of a new round
+        resetUntracked();
+    }
 });
 
 

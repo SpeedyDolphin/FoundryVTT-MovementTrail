@@ -120,6 +120,16 @@ function mergeDiagonals(combatantId){
         }
     }
 }
+export function resetUntracked() {
+    untrackedCombatants.forEach((tokenId) => {
+        if (isCombatantInCombatTracker(tokenId)){
+            untrackedCombatants.delete(tokenId);
+        }
+        else{
+            registerCombatant(tokenId, canvas.tokens.get(tokenId).actor.id, game.combat.round);
+        }
+    });
+}
 
 // Helper functions
 function pointToGrid(x_pixel, y_pixel) {
