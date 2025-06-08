@@ -86,7 +86,7 @@ function getMovementData(changes, tokenId){
     const movement = canvas.grid.measurePath([combatants[tokenId].trail.at(-1)?.pixel, { x, y }], { gridSpaces: true });
           
     return {
-        'pixel': { 'x': x, 'y': y },
+        'pixel': snapToCorner(x, y),
         'grid': pointToGrid(x, y),
         'distance': movement.distance, 
         'cost': movement.cost,
@@ -150,7 +150,7 @@ function isDiagonal(coordA, coordB) {
 function getInitCoordinate(tokenId) {
   const token = canvas.tokens.get(tokenId);
   return {
-    'pixel': { 'x': token.x, 'y': token.y },
+    'pixel': snapToCorner(token.x, token.y),
     'grid': pointToGrid(token.x, token.y),
     'distance': 0,
     'cost': 0,
@@ -160,4 +160,11 @@ function getInitCoordinate(tokenId) {
 function isSameCoordinate(coordA, coordB) {
     console.log(`Comparing coordinates: ${JSON.stringify(coordA)} and ${JSON.stringify(coordB)}`);
     return coordA.grid.x === coordB.grid.x && coordA.grid.y === coordB.grid.y;
+}
+
+function snapToCorner(x,y){
+    const gridSize = canvas.grid.size;
+    const snappedX = Math.round(x / gridSize) * gridSize;
+    const snappedY = Math.round(y / gridSize) * gridSize;
+    return { x: snappedX, y: snappedY };
 }

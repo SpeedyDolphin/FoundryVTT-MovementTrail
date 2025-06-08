@@ -7,3 +7,4 @@
 - [ ] Test to see if movement was caused by the ruler function or drag/teleport.                        
         Use lib-wrapper to monkey patch the move token function on the ruler 
 - [ ] Fix the user color selector. Currently it only uses the color of the user moving the token 
+- [ ] Edit behavior for tokens larger than 1 square
