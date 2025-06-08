@@ -1,4 +1,4 @@
-import { registerCombatant, updateTrail, combatants, pointToGrid } from "./tokenTrail.js";
+import { registerCombatant, updateTrail, showTrail} from "./tokenTrail.js";
 import { renderInit } from "./render.js";
 
 Hooks.once('init', async function() {
@@ -10,15 +10,11 @@ Hooks.once('init', async function() {
     restricted: true,
     editable: [{ key: "KeyV" }],
     onDown: () => {
-      // const token = canvas.tokens.controlled[0];
-      // if (token) {
-      //   const combatant = combatants[token.actor.id];
-      //   if (combatant) {
-          
-      //   }
-      // }
+      const token = canvas.tokens.controlled[0];
+      if (token && game.combat.active === true) {
+          showTrail(token.id);
+      }
       console.log("Athena's Movement Trail | Keybinding Triggered");
-      console.log("I will one day do something :3");
     },
   });
 });
@@ -32,17 +28,12 @@ Hooks.on("updateToken", async (token, changes, options, userId) => {
     console.log("Athena's Movement Trail | Update Token Hook Triggered");    
     // Check if position changed
     if ("x" in changes || "y" in changes) {
-      const combatant = combatants[token.actor.id];
-      updateTrail(combatant, changes, userId);
+      updateTrail(token.id, changes, userId);
   }
 });
 
-
 Hooks.on("updateCombat", async (combat, changed) => {
     console.log("Athena's Movement Trail | Update Combat Hook Triggered");
-    const actor = combat.combatant.actor;
-    const token = canvas.tokens.placeables.find(t => t.actor?.id === actor._id);
-    
-    registerCombatant(token, actor._id);
+    registerCombatant(combat.combatant.token.id, combat.combatant.actor.id, combat.round);
 });
 
