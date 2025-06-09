@@ -24,7 +24,6 @@ function offTurn_registerCombatant(tokenId) {
 
     if(!isCombatantInCombatTracker(tokenId)){
         // If the token is in the combat tracker, we register it normally
-        console.log(`Token ${tokenId} is not in the combat tracker, adding to untrackedCombatants.`);
         untrackedCombatants.add(tokenId);
     }
 }
@@ -34,7 +33,6 @@ function isCombatantInCombatTracker(tokenId) {
 }
 
 export async function updateTrail(tokenId, changes, userId, rulerMovement = false) {
-    console.log("updateTrail called")
     //check if the token is being tracked add it if not
     //TODO clear the data from the previous round at top of the round if the token is not in the combat tracker
     if (combatants[tokenId] === undefined){
@@ -63,9 +61,6 @@ export async function updateTrail(tokenId, changes, userId, rulerMovement = fals
     backtracking(tokenId); 
     mergeDiagonals(tokenId);
 
-        
-    console.log(`Token moved to: ${JSON.stringify(movementData)}`);
-    console.log(`Total movement used: ${combatants[tokenId].total_moved}`)
     console.log(combatants);
       
     //render
@@ -98,7 +93,6 @@ function backtracking(combatantId){
     const combatant = combatants[combatantId];
     //Simple backtracking
     if(combatant.trail.length >=3 && isSameCoordinate(combatant.trail.at(-3), combatant.trail.at(-1))) {
-        console.log("Backtracking True");
         let discarded = combatant.trail.pop();
         combatant.total_moved -= discarded.cost;
         discarded = combatant.trail.pop();
@@ -196,7 +190,6 @@ function getInitCoordinate(tokenId) {
   };
 }
 function isSameCoordinate(coordA, coordB) {
-    console.log(`Comparing coordinates: ${JSON.stringify(coordA)} and ${JSON.stringify(coordB)}`);
     return coordA.grid.x === coordB.grid.x && coordA.grid.y === coordB.grid.y;
 }
 

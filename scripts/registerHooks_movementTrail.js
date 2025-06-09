@@ -6,6 +6,7 @@ Hooks.once('init', async function() {
 
   setKeybindings();
   registerSettings();
+  monkeyPatchRuler();
 });
 
 Hooks.on("canvasReady", async () => {
@@ -60,24 +61,33 @@ function registerSettings(){
 
   // Font Setting
   game.settings.register("athenas-movement-trail", "font", {
-  name: "Font",
-  hint: "The font used for the movement trail text.",
-  scope: "client",         // "world" or "client"
-  config: true,           // Show in the settings UI
-  type: String,
-  default: "Brush Script MT",
-  choices: {
-    "Arial (sans-serif)" : "Arial", 
-    "Verdana": "Verdana",
-    "Tahoma": "Tahoma",
-    "Trebuchet MS": "Trebuchet MS",
-    "Times New Roman": "Times New Roman",
-    "Georgia": "Georgia",
-    "Garamond": "Garamond",
-    "Courier New": "Courier New",
-    "Brush Script MT": "Brush Script MT"
-  },
-  
-});
+    name: "Font",
+    hint: "The font used for the movement trail text.",
+    scope: "client",         // "world" or "client"
+    config: true,           // Show in the settings UI
+    type: String,
+    default: "Brush Script MT",
+    choices: {
+      "Arial (sans-serif)" : "Arial", 
+      "Verdana": "Verdana",
+      "Tahoma": "Tahoma",
+      "Trebuchet MS": "Trebuchet MS",
+      "Times New Roman": "Times New Roman",
+      "Georgia": "Georgia",
+      "Garamond": "Garamond",
+      "Courier New": "Courier New",
+      "Brush Script MT": "Brush Script MT"
+    },  
+  });
+}
 
+function monkeyPatchRuler(){
+  libWrapper.register("athenas-movement-trail","Ruler.prototype.moveToken",
+    function (...args) {
+      console.log(`Token moved using ruler`);
+      console.log(monkeyPatchRuler.token);
+      return;
+    },
+    "LISTENER"
+  );
 }
