@@ -13,10 +13,12 @@
 - [ ] Edit behavior for tokens larger than 1 square
 - [X] ~~Hide movements done by dm~~ Restrict movement to users with a certain level of token ownership 
 - [X] check to see how it handles switching scenes mid combat
+- [ ] Make a button that turns off auto backtracking 
 
 
 
 
 BUGS:
 - [ ] Does not sync properly when the tab is inactive
-- [ ] Will merge the path without taking into account walls  
+- [X] Will merge the path without taking into account walls 
+   - [ ] Does not account for large creatures. Will only take the middle of the top left square into account.  

@@ -103,7 +103,15 @@ function backtracking(combatantId){
 }
 function mergeDiagonals(combatantId){
     const combatant = combatants[combatantId];
+    let i = 0
     while(combatants[combatantId].trail.length >= 3 && isAdjacent(combatant.trail.at(-1), combatant.trail.at(-3))){
+        console.log(`Iteration ${i++}`);
+        if(isWalledOff(combatant.trail.at(-1), combatant.trail.at(-3))){
+            // If the last two points are adjacent but walled off, we cannot merge them
+            console.log('Cannot merge points due to wall');
+            return;
+        }
+        console.log('Merging points');   
         combatant.total_moved  -= combatant.trail.at(-2).cost; // Remove the cost of the middle point
         combatant.trail.splice(-2, 1); // Remove the middle point
         
@@ -116,6 +124,18 @@ function mergeDiagonals(combatantId){
         }
     }
 }
+function isWalledOff(coordA, coordB) {
+    const gridSize = canvas.grid.size;
+    console.log(`Checking wall between ${coordA.grid.x}, ${coordA.grid.y} and ${coordB.grid.x}, ${coordB.grid.y}`);
+    const wallCheck = ClockwiseSweepPolygon.testCollision(
+        { x: coordA.pixel.x + gridSize/2, y: coordA.pixel.y + gridSize/2},
+        { x: coordB.pixel.x+gridSize/2, y: coordB.pixel.y+gridSize/2 },
+        {type: "move"}
+    );
+    console.log(wallCheck)
+    return wallCheck.length > 0;
+}
+
 export function resetUntracked() {
     untrackedCombatants.forEach((tokenId) => {
         if (isCombatantInCombatTracker(tokenId)){

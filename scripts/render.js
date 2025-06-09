@@ -80,8 +80,6 @@ function drawBasicMovementUsageIndicator(x, y,currentCost, container){
 
     //Draw Square
     const square = new PIXI.Graphics();
-    console.log(currentCost);
-    console.log(`Current step: ${Math.floor(currentCost / userMovement)}, Current color: ${game.settings.get("athenas-movement-trail", "movementUsageColorScheme")}`);
     const color = colorPalette[game.settings.get("athenas-movement-trail", "movementUsageColorScheme")][Math.floor(currentCost / userMovement)];
     square.lineStyle(3, color, .6);  // (thickness, color, alpha) 3px red outline
     square.drawRoundedRect(0, 0, gridSize - gridSize*.07, gridSize - gridSize*.07, gridSize*.15); // Position and size
