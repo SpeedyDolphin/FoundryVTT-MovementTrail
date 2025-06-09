@@ -130,6 +130,34 @@ export function resetUntracked() {
         }
     });
 }
+//Save data
+export async function saveData(){
+    if (game.user.isGM === true) {
+        await game.scenes.active.setFlag("athenas-movement-trail", "movementTrailData", {
+            combatants: combatants,
+            untrackedCombatants: Array.from(untrackedCombatants)
+        });
+    }
+}
+export async function loadData() {
+    const data = await game.scenes.active.getFlag("athenas-movement-trail", "movementTrailData");
+    if (data) {
+        combatants = data.combatants;
+        untrackedCombatants = new Set(data.untrackedCombatants);
+    } else
+    {
+        // This initializes if we are switching scenes
+        combatants = {};
+        untrackedCombatants.clear();
+    }
+}
+export async function clearData() {
+    combatants = {};
+    untrackedCombatants.clear();
+    if (game.user.isGM === true) {
+        await game.scenes.active.unsetFlag("athenas-movement-trail", "movementTrailData");
+    }
+}
 
 // Helper functions
 function pointToGrid(x_pixel, y_pixel) {

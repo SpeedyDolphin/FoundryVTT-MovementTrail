@@ -1,13 +1,14 @@
-const mainContainer = new PIXI.Container();
-const subContainers = {};
+let mainContainer
+let subContainers
 
 const delay = 3000; // 3 seconds
 
 export function renderInit(){
+    mainContainer = new PIXI.Container();
+    subContainers = {};
     const layer = canvas.layers.find((l) => l.options?.name === "grid");
     layer.addChild(mainContainer)
 }
-
 export async function renderCombatantTrail(combatantId, trail, userId){
     //adds a unique container for each combatant if it doesn't exist
     if (subContainers[combatantId] === undefined){
@@ -72,7 +73,7 @@ function drawSquare(x, y, color, number, container){
 
 function getUserColor(tokenId, userId) {
     const actorId = canvas.tokens.get(tokenId)?.actor?.id;
-    
+
     //get the user of the token via the main character of the token
     let owningUsers = game.users.players.filter(u => u.character?.id === actorId);
     if (owningUsers.length > 0) {

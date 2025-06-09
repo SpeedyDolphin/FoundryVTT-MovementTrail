@@ -1,4 +1,4 @@
-import { registerCombatant, updateTrail, showTrail, resetUntracked} from "./tokenTrail.js";
+import { registerCombatant, updateTrail, showTrail, resetUntracked, saveData, loadData, clearData} from "./tokenTrail.js";
 import { renderInit } from "./render.js";
 
 Hooks.once('init', async function() {
@@ -8,17 +8,19 @@ Hooks.once('init', async function() {
   registerSettings();
 });
 
-Hooks.once("canvasReady", async () => {
+Hooks.on("canvasReady", async () => {
   console.log("Athena's Movement Trail | Canvas Ready Hook Triggered");
   renderInit();
+  loadData();
 });
 
 Hooks.on("updateToken", async (token, changes, options, userId) => {
     console.log("Athena's Movement Trail | Update Token Hook Triggered");    
     // Check if position changed
-    if ("x" in changes || "y" in changes) {
+    if (game.combat && ("x" in changes || "y" in changes)) {
       updateTrail(token.id, changes, userId);
-  }
+      saveData(); //only the gm user saves the data
+    }
 });
 
 Hooks.on("updateCombat", async (combat, changed) => {
@@ -29,11 +31,14 @@ Hooks.on("updateCombat", async (combat, changed) => {
         // Reset untracked combatants at the start of a new round
         resetUntracked();
     }
+    saveData(); //only the gm user saves the data
 });
 
-
-
-
+Hooks.on("deleteCombat", (combat, options, userId) => {
+  console.log("Combat has ended!");
+  // Your cleanup or post-combat logic here
+  clearData(); // Clear all data when combat ends
+});
 
 function setKeybindings(){
   game.keybindings.register("athenas-movement-trail", "showTrail", {
