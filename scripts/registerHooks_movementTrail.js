@@ -1,4 +1,4 @@
-import { registerCombatant, updateTrail, showTrail, resetUntracked, saveData, loadData, clearData} from "./tokenTrail.js";
+import { registerCombatant, updateTrail, showTrail, resetUntracked, saveData, loadData, clearData, rulerUpdateTrail} from "./tokenTrail.js";
 import { renderInit } from "./render.js";
 
 Hooks.once('init', async function() {
@@ -85,7 +85,8 @@ function monkeyPatchRuler(){
   libWrapper.register("athenas-movement-trail","Ruler.prototype.moveToken",
     function (...args) {
       console.log(`Token moved using ruler`);
-      console.log(monkeyPatchRuler.token);
+      console.log(this.segments);      
+      rulerUpdateTrail(this.token.id, this.segments, this.user.id);
       return;
     },
     "LISTENER"

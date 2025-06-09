@@ -32,21 +32,15 @@ function isCombatantInCombatTracker(tokenId) {
     return game.combat.combatants.some(c => c.token.id === tokenId);
 }
 
-export async function updateTrail(tokenId, changes, userId, rulerMovement = false) {
+export async function updateTrail(tokenId, changes, userId) {
     //check if the token is being tracked add it if not
-    //TODO clear the data from the previous round at top of the round if the token is not in the combat tracker
     if (combatants[tokenId] === undefined){
         offTurn_registerCombatant(tokenId)
     } 
 
     const movementData = getMovementData(changes, tokenId);
-    if (rulerMovement){
-        // If the movement is from a ruler we process it differently
-        //TODO: Implement ruler movement logic
-        console.log("Ruler Movement Detected");
-        return;
-    }
-    else if (movementData.distance !== canvas.scene.grid.distance){
+    
+    if (movementData.distance !== canvas.scene.grid.distance){
         // This means that the token is not moving to an adjacent square, so we ignore the movement
         combatants[tokenId].trail.push(movementData);
         combatants[tokenId].trail.at(-1).cost = 0; // Set the cost to 0 for non-adjacent movements
@@ -67,6 +61,16 @@ export async function updateTrail(tokenId, changes, userId, rulerMovement = fals
     renderCombatantTrail(tokenId, combatants[tokenId].trail, userId); 
 
 }
+
+//Segments: ['Ray':{"A":{'x':num, 'y':num}, B:{'x':num, 'y':num}}, teleport: boolean]
+export function rulerUpdateTrail(tokenId, segments, userId) {
+    if (combatants[tokenId] === undefined){
+        offTurn_registerCombatant(tokenId)
+    }
+    
+    
+}
+
 export function showTrail(tokenId){
     if (combatants[tokenId] === undefined) {
         return;
