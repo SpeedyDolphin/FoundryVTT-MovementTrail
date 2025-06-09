@@ -26,7 +26,12 @@
                 "minimum": "1.0.0.0",
                 "verified": "1.12.6.0"
             }
-        }
+        }, 
+        {
+          "name": "fvtt-color-picker",
+          "type": "library",
+          "manifest": "https://github.com/Larkinabout/fvtt-color-picker/releases/download/1.4/module.json"
+    }
     ]
   }
 }

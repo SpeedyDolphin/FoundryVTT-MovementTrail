@@ -3,6 +3,23 @@ let subContainers
 
 const delay = 3000; // 3 seconds
 
+const colorPalette = {
+    'basic':
+    {
+        0: 0x00ff00, // green
+        1: 0xffff00, // yellow  
+        2: 0xffa500, // orange
+        3: 0xff0000, // red
+    }, 
+    'embers':
+    {
+        0: 0x41436A, // plum
+        1: 0x984063, // burgundy
+        2: 0xF64668, // orange
+        3: 0xFE9677 // Yellow
+    }
+}
+
 export function renderInit(){
     mainContainer = new PIXI.Container();
     subContainers = {};
@@ -34,10 +51,42 @@ function drawTrail(trail, container, color){
     let cost = 0
     for (let i = 0; i < trail.length; i++){
         cost = Math.round(cost + trail[i].cost ?? 0); // rounding to avoid floating point issues
-        drawSquare(trail[i].pixel.x, trail[i].pixel.y, color, String(cost), container) 
+        drawSquare(trail[i].pixel.x, trail[i].pixel.y, color, String(cost), container)
+        movementUsageIndicator(trail[i].pixel.x, trail[i].pixel.y, cost, container); 
      }
      console.log(`Total travel cost ${cost}`);
 }
+function movementUsageIndicator(x, y, currentCost, container){
+
+    switch (game.settings.get("athenas-movement-trail", "movementUsageIndicator")){
+        case 'none':
+            break;
+        case 'basic':
+            drawBasicMovementUsageIndicator(x, y, currentCost, container);
+            break;
+        case 'footprints':
+            drawFootprintMovementUsageIndicator(x, y, currentCost, container);
+            break;
+    }
+}
+function drawBasicMovementUsageIndicator(x, y,currentCost, container){
+    const gridSize = canvas.grid.size;
+    const userMovement = 30; //TODO get the actual movement of the actor 
+
+    //Draw Square
+    const square = new PIXI.Graphics();
+    console.log(currentCost);
+    console.log(`Current step: ${Math.floor(currentCost / userMovement)}, Current color: ${game.settings.get("athenas-movement-trail", "movementUsageColorScheme")}`);
+    const color = colorPalette[game.settings.get("athenas-movement-trail", "movementUsageColorScheme")][Math.floor(currentCost / userMovement)];
+    square.lineStyle(3, color, .6);  // (thickness, color, alpha) 3px red outline
+    square.drawRoundedRect(0, 0, gridSize - gridSize*.07, gridSize - gridSize*.07, gridSize*.15); // Position and size
+    square.endFill();
+    
+    //Position and mount square
+    square.x = x + gridSize*.03; 
+    square.y = y + gridSize*.03;
+    container.addChild(square);
+}    
 //x, y should be the coordinates for the top left corner 
 function drawSquare(x, y, color, number, container){
     const gridSize = canvas.grid.size
