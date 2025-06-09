@@ -154,6 +154,21 @@ function registerSettings(){
     default: "system.attributes.movement.walk",
     type: String
   });
+  game.settings.register("athenas-movement-trail", "ownershipLevel", {
+    name: "Minium Ownership Level",
+    hint: "The minimum ownership level required to see the movement trail.",
+    scope: "world",         // "world" or "client"
+    config: true,           // Show in the settings UI
+    type: Number,
+    default: 1,
+    choices: {
+      0: "None",
+      1: "Limited",
+      2: "Observer",
+      3: "Owner"
+    },  
+  });
+  
 }
 
 function monkeyPatchRuler(){

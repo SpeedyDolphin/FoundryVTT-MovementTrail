@@ -27,6 +27,11 @@ export function renderInit(){
     layer.addChild(mainContainer)
 }
 export async function renderCombatantTrail(combatantId, trail, userId){
+    if(!meetsOwnershipThreshold(combatantId)) {
+        // If the user does not meet the ownership threshold, do not render the trail
+        return;
+    }
+
     //adds a unique container for each combatant if it doesn't exist
     if (subContainers[combatantId] === undefined){
         subContainers[combatantId] = {'container' : new PIXI.Container(), 'version':0, 'color': getUserColor(combatantId, userId)};
@@ -131,4 +136,15 @@ function getUserColor(tokenId, userId) {
     //gets color of the user who moved the token
     const user = game.users.get(userId);
     return user.color;
+}
+
+function meetsOwnershipThreshold(tokenId){
+    const actor = canvas.tokens.get(tokenId)?.actor;
+    const minOwnership = game.settings.get("athenas-movement-trail", "ownershipLevel");
+
+    if (actor.getUserLevel(game.user) >= minOwnership || game.user.isGM) {
+        return true;
+    }
+    return false; 
+
 }

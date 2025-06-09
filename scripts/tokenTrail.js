@@ -67,8 +67,6 @@ export function rulerUpdateTrail(tokenId, segments, userId) {
     if (combatants[tokenId] === undefined){
         offTurn_registerCombatant(tokenId)
     }
-    
-    
 }
 
 export function showTrail(tokenId){
