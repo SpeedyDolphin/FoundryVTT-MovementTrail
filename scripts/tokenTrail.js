@@ -3,7 +3,7 @@ import { renderCombatantTrail} from "./render.js";
 
 let combatants = {};
 let untrackedCombatants = new Set(); // This will hold the ids of combatants that are not currently in the combat tracker but have moved. Resets at top of the round.
-
+let canCondensePaths = true; // This is a global variable that can be toggled to enable or disable path condensing
 //This function adds a new token to the tracker or clears data from the previous round
 export function registerCombatant(tokenId, actorId, round) {
     //Sets the combatant's initial position on it's turn. Does not update if moving backwards in the turn tracker 
@@ -51,9 +51,10 @@ export async function updateTrail(tokenId, changes, userId) {
     combatants[tokenId].trail.push(movementData);
     combatants[tokenId].total_moved += movementData.cost; 
 
-     
-    backtracking(tokenId); 
-    mergeDiagonals(tokenId);
+    if(canCondensePaths){
+        backtracking(tokenId); 
+        mergeDiagonals(tokenId);
+    }
 
     console.log(combatants);
       
@@ -126,13 +127,11 @@ function mergeDiagonals(combatantId){
 }
 function isWalledOff(coordA, coordB) {
     const gridSize = canvas.grid.size;
-    console.log(`Checking wall between ${coordA.grid.x}, ${coordA.grid.y} and ${coordB.grid.x}, ${coordB.grid.y}`);
     const wallCheck = ClockwiseSweepPolygon.testCollision(
         { x: coordA.pixel.x + gridSize/2, y: coordA.pixel.y + gridSize/2},
         { x: coordB.pixel.x+gridSize/2, y: coordB.pixel.y+gridSize/2 },
         {type: "move"}
     );
-    console.log(wallCheck)
     return wallCheck.length > 0;
 }
 
@@ -145,6 +144,10 @@ export function resetUntracked() {
             registerCombatant(tokenId, canvas.tokens.get(tokenId).actor.id, game.combat.round);
         }
     });
+}
+export function togglePathCondensing() {
+    canCondensePaths = !canCondensePaths;
+    console.log(`Path condensing is now ${canCondensePaths ? 'enabled' : 'disabled'}`);
 }
 //Save data
 export async function saveData(){

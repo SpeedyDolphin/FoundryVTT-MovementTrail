@@ -5,8 +5,8 @@
 - [ ] Add footprints to show direction and if movement requires dashing and so on 
     - [ ] add a way to customize per token the footprint icon
     - [ ] add a way to choose custom colors 
-- [ ] Take into account the character's actual movement speed. 
-    - [ ] Make the path to the movement speed customizable to the game system
+- [X] Take into account the character's actual movement speed. 
+    - [X] Make the path to the movement speed customizable to the game system
 - [ ] Test to see if movement was caused by the ruler function or drag/teleport.                        
         Use lib-wrapper to monkey patch the move token function on the ruler 
 - [X] Fix the user color selector. Currently it only uses the color of the user moving the token 
@@ -14,6 +14,7 @@
 - [X] ~~Hide movements done by dm~~ Restrict movement to users with a certain level of token ownership 
 - [X] check to see how it handles switching scenes mid combat
 - [ ] Make a button that turns off auto backtracking 
+- [ ] Make a proper read me
 
 
 
