@@ -41,7 +41,7 @@ export async function renderCombatantTrail(combatantId, trail, userId){
     subContainers[combatantId].container.removeChildren().forEach(child => child.destroy({ children: true }));
 
     //render the new trail
-    drawTrail(trail, subContainers[combatantId].container, subContainers[combatantId].color);
+    drawTrail(trail, subContainers[combatantId].container, subContainers[combatantId].color, combatantId);
     subContainers[combatantId].version += 1;
     const currContainer = subContainers[combatantId].version;
 
@@ -52,35 +52,35 @@ export async function renderCombatantTrail(combatantId, trail, userId){
     }
 }
 
-function drawTrail(trail, container, color){
+function drawTrail(trail, container, color, tokenId){
     let cost = 0
     for (let i = 0; i < trail.length; i++){
         cost = Math.round(cost + trail[i].cost ?? 0); // rounding to avoid floating point issues
         drawSquare(trail[i].pixel.x, trail[i].pixel.y, color, String(cost), container)
-        movementUsageIndicator(trail[i].pixel.x, trail[i].pixel.y, cost, container); 
+        movementUsageIndicator(trail[i].pixel.x, trail[i].pixel.y, cost, container, tokenId); 
      }
      console.log(`Total travel cost ${cost}`);
 }
-function movementUsageIndicator(x, y, currentCost, container){
+function movementUsageIndicator(x, y, currentCost, container, tokenId){
 
     switch (game.settings.get("athenas-movement-trail", "movementUsageIndicator")){
         case 'none':
             break;
         case 'basic':
-            drawBasicMovementUsageIndicator(x, y, currentCost, container);
+            drawBasicMovementUsageIndicator(x, y, currentCost, container, tokenId);
             break;
         case 'footprints':
-            drawFootprintMovementUsageIndicator(x, y, currentCost, container);
+            drawFootprintMovementUsageIndicator(x, y, currentCost, container, tokenId);
             break;
     }
 }
-function drawBasicMovementUsageIndicator(x, y,currentCost, container){
+function drawBasicMovementUsageIndicator(x, y,currentCost, container, tokenId){
     const gridSize = canvas.grid.size;
-    const userMovement = 30; //TODO get the actual movement of the actor 
+    const userMovement = getSpeed(tokenId); //TODO get the actual movement of the actor 
 
     //Draw Square
     const square = new PIXI.Graphics();
-    const color = colorPalette[game.settings.get("athenas-movement-trail", "movementUsageColorScheme")][Math.floor(currentCost / userMovement)];
+    const color = colorPalette[game.settings.get("athenas-movement-trail", "movementUsageColorScheme")][Math.floor(currentCost / (userMovement+1))];
     square.lineStyle(3, color, .6);  // (thickness, color, alpha) 3px red outline
     square.drawRoundedRect(0, 0, gridSize - gridSize*.07, gridSize - gridSize*.07, gridSize*.15); // Position and size
     square.endFill();
@@ -145,4 +145,9 @@ function meetsOwnershipThreshold(tokenId){
     }
     return false; 
 
+}
+function getSpeed(tokenId){
+    const actor = canvas.tokens.get(tokenId).actor;
+    const path = game.settings.get("athenas-movement-trail", "actorMovementSpeedPath");
+    return path.split('.').reduce((acc, key) => acc[key], actor).distance || 0;
 }
