@@ -13,7 +13,7 @@
 - [ ] Edit behavior for tokens larger than 1 square
 - [X] ~~Hide movements done by dm~~ Restrict movement to users with a certain level of token ownership 
 - [X] check to see how it handles switching scenes mid combat
-- [ ] Make a button that turns off auto backtracking 
+- [X] Make a button that turns off auto backtracking 
 - [ ] Make a proper read me
 
 
