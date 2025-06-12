@@ -79,12 +79,18 @@ function minOwnership(){
   });
 }
 function setMovementPath(){
+  const gameSystemPaths = {
+    "a5e": "system.attributes.movement.walk.distance",
+    "dnd5e": "system.attributes.movement.walk",
+    "pf2e": "system.attributes.speed.total",
+  }
+
   game.settings.register("athenas-movement-trail", "actorMovementSpeedPath", {
     name: "Actor Movement Speed Path",
     hint: "The path to the actor's movement speed attribute.",
     scope: "world",       // or "world" depending on your use case
     config: true,          // show in settings UI
-    default: "system.attributes.movement.walk",
+    default: gameSystemPaths[game.system.id] || "system.attributes.movement.walk",
     type: String
   });
 }
