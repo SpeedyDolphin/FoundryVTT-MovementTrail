@@ -3,7 +3,9 @@ let subContainers
 
 const delay = 3000; // 3 seconds
 
-const colorPalette = {
+function getColorPalette(){
+    //This is a function because it can dynamically get colors from the game settings. 
+    return {
     'basic':
     {
         0: 0x00ff00, // green
@@ -17,7 +19,15 @@ const colorPalette = {
         1: 0x984063, // burgundy
         2: 0xF64668, // orange
         3: 0xFE9677 // Yellow
+    },
+    'custom':
+    {
+        0: Number(game.settings.get("athenas-movement-trail", "custom-color1")),
+        1: Number(game.settings.get("athenas-movement-trail", "custom-color2")),
+        2: Number(game.settings.get("athenas-movement-trail", "custom-color3")),
+        3: Number(game.settings.get("athenas-movement-trail", "custom-color4"))
     }
+  }
 }
 
 export function renderInit(){
@@ -77,6 +87,7 @@ function movementUsageIndicator(x, y, currentCost, container, tokenId){
 function drawBasicMovementUsageIndicator(x, y,currentCost, container, tokenId){
     const gridSize = canvas.grid.size;
     const userMovement = getSpeed(tokenId); //TODO get the actual movement of the actor 
+    const colorPalette = getColorPalette()
 
     //Draw Square
     const square = new PIXI.Graphics();

@@ -58,8 +58,40 @@ function colorScheme(){
     choices: {
       "basic": "Basic (Green, Yellow, Orange, Red)",
       "embers": "Embers (Orange, Pink, Orchid, Plum)",
-      "goth": "Goth (Black, DarkGrey, Grey, White)",
+      "custom": "Custom",
     },  
+  });
+  game.settings.register("athenas-movement-trail", "custom-color1", {
+    name: "Custom color 1",
+    hint: "The first color the movement indicator uses. Please use hex code",
+    scope: "client",       // or "world" depending on your use case
+    config: true,          // show in settings UI
+    default: 0x00ff00,
+    type: String
+  });
+  game.settings.register("athenas-movement-trail", "custom-color2", {
+    name: "Custom color 2",
+    hint: "The second color the movement indicator uses. Please use hex code",
+    scope: "client",       // or "world" depending on your use case
+    config: true,          // show in settings UI
+    default: 0x00ff00,
+    type: String
+  });
+  game.settings.register("athenas-movement-trail", "custom-color3", {
+    name: "Custom color 3",
+    hint: "The third color the movement indicator uses. Please use hex code",
+    scope: "client",       // or "world" depending on your use case
+    config: true,          // show in settings UI
+    default: 0x00ff00,
+    type: String
+  });
+  game.settings.register("athenas-movement-trail", "custom-color4", {
+    name: "Custom color 4",
+    hint: "The fourth color the movement indicator uses. Please use hex code",
+    scope: "client",       // or "world" depending on your use case
+    config: true,          // show in settings UI
+    default: 0x00ff00,
+    type: String
   });
 } 
 function minOwnership(){
