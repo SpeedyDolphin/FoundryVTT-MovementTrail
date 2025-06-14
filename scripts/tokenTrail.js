@@ -2,6 +2,7 @@
 import { renderCombatantTrail} from "./render.js";
 
 let combatants = {};
+let rulerMovingCombatants = {} // I don't think this does much but I suppose it's a nice mutex just in case
 let untrackedCombatants = new Set(); // This will hold the ids of combatants that are not currently in the combat tracker but have moved. Resets at top of the round.
 let canCondensePaths = true; // This is a global variable that can be toggled to enable or disable path condensing
 //This function adds a new token to the tracker or clears data from the previous round
@@ -33,6 +34,16 @@ function isCombatantInCombatTracker(tokenId) {
 }
 
 export async function updateTrail(tokenId, changes, userId) {
+    if(tokenId in rulerMovingCombatants){
+        console.log(`Currently moving via ruler. Normal update trail blocked. Value ${rulerMovingCombatants[tokenId]}`)
+        rulerMovingCombatants[tokenId] -= 1; 
+        if(rulerMovingCombatants[tokenId] === 0){
+            delete rulerMovingCombatants[tokenId]
+            console.log("Token unlocked")
+        }
+        return
+    }
+    
     //check if the token is being tracked add it if not
     if (combatants[tokenId] === undefined){
         offTurn_registerCombatant(tokenId)
@@ -40,7 +51,10 @@ export async function updateTrail(tokenId, changes, userId) {
 
     const movementData = getMovementData(changes, tokenId);
     
-    if (movementData.distance !== canvas.scene.grid.distance){
+    if (movementData.distance > canvas.scene.grid.distance){
+        console.log('throwing a hissy fit for no good reason')
+        console.log(movementData.distance)
+        console.log(canvas.scene.grid.distance)
         // This means that the token is not moving to an adjacent square, so we ignore the movement
         combatants[tokenId].trail.push(movementData);
         combatants[tokenId].trail.at(-1).cost = 0; // Set the cost to 0 for non-adjacent movements
@@ -63,11 +77,36 @@ export async function updateTrail(tokenId, changes, userId) {
 
 }
 
-//Segments: ['Ray':{"A":{'x':num, 'y':num}, B:{'x':num, 'y':num}}, teleport: boolean]
+//Segments: ['ray':{"A":{'x':num, 'y':num}, B:{'x':num, 'y':num}}, teleport: boolean]
 export function rulerUpdateTrail(tokenId, segments, userId) {
+    rulerMovingCombatants[tokenId] = segments.length
     if (combatants[tokenId] === undefined){
         offTurn_registerCombatant(tokenId)
     }
+    for(let i = 0; i< segments.length; i++)
+    {
+        if(segments[i].teleport === true){ // dnd5e does not seem to use this to teleport. Adding it just in case
+            continue
+        }
+        const points = getGridSquaresFromRay(segments[i].ray)
+
+
+        for(let j = 1; j < points.length; j++){
+            // Do something with element
+            console.log(`Points along path (${points[j].x}, ${points[j].y})`)
+            const movementData = getMovementDataFromPoints(points[j-1], points[j])
+            combatants[tokenId].trail.push(movementData);
+            combatants[tokenId].total_moved += movementData.cost; 
+
+            if(canCondensePaths){
+                backtracking(tokenId); 
+                mergeDiagonals(tokenId);
+            }
+
+        }
+    }
+    console.log(combatants);
+    renderCombatantTrail(tokenId, combatants[tokenId].trail, userId); 
 }
 
 export function showTrail(tokenId){
@@ -81,11 +120,24 @@ function getMovementData(changes, tokenId){
     //get the new (x,y) coordinates. Falls back on the token's position given that 'changes' may not include both x and y.
     const x = changes.x ?? token.x;
     const y = changes.y ?? token.y; 
-    const movement = canvas.grid.measurePath([combatants[tokenId].trail.at(-1)?.pixel, { x, y }], { gridSpaces: true });
+    const movement = canvas.grid.measurePath([combatants[tokenId].trail.at(-1)?.pixel, snapToCorner(x, y)], { gridSpaces: true });
           
     return {
         'pixel': snapToCorner(x, y),
         'grid': pointToGrid(x, y),
+        'distance': movement.distance, 
+        'cost': movement.cost,
+        'diagonal': movement.diagonals > 0  
+    };
+}
+// 'a' and 'b' are both points representing the current grid position {'x': num, 'y':num}
+function getMovementDataFromPoints(a, b){
+    console.log(b)
+    const movement = canvas.grid.measurePath([gridToPoint(a), gridToPoint(b)], { gridSpaces: true });
+    console.log(movement)
+    return {
+        'pixel': gridToPoint(b),
+        'grid': {'x':b.y, "y": b.x}, // idk why they're swapped but they are. If it bricks after a foundry update this may be the cause? 
         'distance': movement.distance, 
         'cost': movement.cost,
         'diagonal': movement.diagonals > 0  
@@ -185,6 +237,11 @@ function pointToGrid(x_pixel, y_pixel) {
   const y = Math.floor(y_pixel / gridSize);
   return { x, y };
 }
+// Point{'x':num, 'y':num}
+function gridToPoint(point){
+    const converted = canvas.grid.getPixelsFromGridPosition(point.x, point.y)
+    return {'x': converted[0], 'y':converted[1]}
+}
 
 function isAdjacent(coordA, coordB) {
   console.log(coordA)
@@ -223,4 +280,38 @@ function snapToCorner(x,y){
     const snappedX = Math.round(x / gridSize) * gridSize;
     const snappedY = Math.round(y / gridSize) * gridSize;
     return { x: snappedX, y: snappedY };
+}
+
+function getGridSquaresFromRay(ray) {
+  const [x0, y0] = canvas.grid.getGridPositionFromPixels(ray.A.x, ray.A.y);
+  const [x1, y1] = canvas.grid.getGridPositionFromPixels(ray.B.x, ray.B.y);
+
+  const points = [];
+
+  // Bresenham's Line Algorithm
+  let dx = Math.abs(x1 - x0);
+  let dy = Math.abs(y1 - y0);
+  let sx = x0 < x1 ? 1 : -1;
+  let sy = y0 < y1 ? 1 : -1;
+  let err = dx - dy;
+
+  let x = x0;
+  let y = y0;
+
+  while (true) {
+    points.push({x, y});
+
+    if (x === x1 && y === y1) break;
+
+    let e2 = 2 * err;
+    if (e2 > -dy) {
+      err -= dy;
+      x += sx;
+    }
+    if (e2 < dx) {
+      err += dx;
+      y += sy;
+    }
+  }
+  return points;
 }

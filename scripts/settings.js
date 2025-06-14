@@ -48,7 +48,7 @@ function movementIndicator(){
   });
 }
 function colorScheme(){
-    game.settings.register("athenas-movement-trail", "movementUsageColorScheme", {
+  game.settings.register("athenas-movement-trail", "movementUsageColorScheme", {
     name: "Movement Usage Color Scheme",
     hint: "Color scheme for the movement usage indicator.",
     scope: "client",         // "world" or "client"
@@ -59,14 +59,21 @@ function colorScheme(){
       "basic": "Basic (Green, Yellow, Orange, Red)",
       "embers": "Embers (Orange, Pink, Orchid, Plum)",
       "custom": "Custom",
-    },  
+    },
   });
+  Hooks.on("renderSettingsConfig", (app, html, data) => {
+    const selectedValue = game.settings.get("athenas-movement-trail", "movementUsageColorScheme");
+    toggleCustomFields(selectedValue);
+  });
+
+
+
   game.settings.register("athenas-movement-trail", "custom-color1", {
     name: "Custom color 1",
     hint: "The first color the movement indicator uses. Please use hex code",
     scope: "client",       // or "world" depending on your use case
     config: true,          // show in settings UI
-    default: 0x00ff00,
+    default: '0x00ff00',
     type: String
   });
   game.settings.register("athenas-movement-trail", "custom-color2", {
@@ -74,7 +81,7 @@ function colorScheme(){
     hint: "The second color the movement indicator uses. Please use hex code",
     scope: "client",       // or "world" depending on your use case
     config: true,          // show in settings UI
-    default: 0x00ff00,
+    default: '0xffff00',
     type: String
   });
   game.settings.register("athenas-movement-trail", "custom-color3", {
@@ -82,7 +89,7 @@ function colorScheme(){
     hint: "The third color the movement indicator uses. Please use hex code",
     scope: "client",       // or "world" depending on your use case
     config: true,          // show in settings UI
-    default: 0x00ff00,
+    default: '0xffa500',
     type: String
   });
   game.settings.register("athenas-movement-trail", "custom-color4", {
@@ -90,7 +97,7 @@ function colorScheme(){
     hint: "The fourth color the movement indicator uses. Please use hex code",
     scope: "client",       // or "world" depending on your use case
     config: true,          // show in settings UI
-    default: 0x00ff00,
+    default: '0xff0000',
     type: String
   });
 } 
@@ -126,4 +133,18 @@ function setMovementPath(){
     type: String
   });
 }
+function toggleCustomFields(selectedValue) {
+  console.log("I DID NOTHING :D")
+  const el = document.querySelector('[name="my-module.optionSelector"]')?.closest(".form-group");
+  if (!el) return;
+
+  let sibling = el.nextElementSibling;
+  for (let i = 0; i < 4 && sibling; i++) {
+    if (sibling.classList.contains("form-group")) {
+      sibling.style.display = selectedValue === "custom" ? "" : "none";
+    }
+    sibling = sibling.nextElementSibling;
+  }
+}
+
 

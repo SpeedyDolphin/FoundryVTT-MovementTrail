@@ -7,7 +7,7 @@
     - [ ] add a way to choose custom colors 
 - [X] Take into account the character's actual movement speed. 
     - [X] Make the path to the movement speed customizable to the game system
-- [ ] Test to see if movement was caused by the ruler function or drag/teleport.                        
+- [X] Test to see if movement was caused by the ruler function or drag/teleport.                        
         Use lib-wrapper to monkey patch the move token function on the ruler 
 - [X] Fix the user color selector. Currently it only uses the color of the user moving the token 
 - [ ] Edit behavior for tokens larger than 1 square
@@ -15,7 +15,8 @@
 - [X] check to see how it handles switching scenes mid combat
 - [X] Make a button that turns off auto backtracking 
 - [ ] Make a proper read me
-
+- [ ] Find a way to hide fields in foundry setting page. 
+- [ ] If a combatant is removed from the turn tracker, add it to the list of untracked combatants 
 
 
 
@@ -23,3 +24,5 @@ BUGS:
 - [ ] Does not sync properly when the tab is inactive
 - [X] Will merge the path without taking into account walls 
    - [ ] Does not account for large creatures. Will only take the middle of the top left square into account.  
+- [ ] point to grid occasionally breaks when spamming arrow keys. Potentially not calling the snapping funtion first? 
+      Pixel coordinates appear to  be stable

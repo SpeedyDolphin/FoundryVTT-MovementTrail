@@ -27,7 +27,8 @@ Hooks.on("updateToken", async (token, changes, options, userId) => {
 
 Hooks.on("updateCombat", async (combat, changed) => {
     console.log("Athena's Movement Trail | Update Combat Hook Triggered");
-    registerCombatant(combat.combatant.token.id, combat.combatant.actor.id, combat.round);
+    if(combat.combatant.token !== undefined) // this is a guard for when no one has rolled initiative but the tracker is advanced anyways.  
+      registerCombatant(combat.combatant.token.id, combat.combatant.actor.id, combat.round);
 
     if (changed.round) {
         // Reset untracked combatants at the start of a new round
