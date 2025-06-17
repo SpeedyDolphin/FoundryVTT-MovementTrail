@@ -22,12 +22,16 @@ function getColorPalette(){
     },
     'custom':
     {
-        0: Number(game.settings.get("athenas-movement-trail", "custom-color1")),
-        1: Number(game.settings.get("athenas-movement-trail", "custom-color2")),
-        2: Number(game.settings.get("athenas-movement-trail", "custom-color3")),
-        3: Number(game.settings.get("athenas-movement-trail", "custom-color4"))
+        0: getNumericalColor(game.settings.get("athenas-movement-trail", "customColor1")),
+        1: getNumericalColor(game.settings.get("athenas-movement-trail", "customColor2")),
+        2: getNumericalColor(game.settings.get("athenas-movement-trail", "customColor3")),
+        3: getNumericalColor(game.settings.get("athenas-movement-trail", "customColor4"))
     }
   }
+}
+// Color format is "#RRGGBBAA"
+function getNumericalColor(color){ 
+  return parseInt(color.slice(1, 7), 16);
 }
 
 export function renderInit(){

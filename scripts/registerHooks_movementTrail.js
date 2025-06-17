@@ -9,7 +9,7 @@ Hooks.once('init', async function() {
   registerSettings();
   monkeyPatchRuler();
 });
- 
+
 Hooks.on("canvasReady", async () => {
   console.log("Athena's Movement Trail | Canvas Ready Hook Triggered");
   renderInit();

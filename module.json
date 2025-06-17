@@ -20,18 +20,22 @@
   "relationships": {
     "requires": [
         {
-            "id": "lib-wrapper",
-            "type": "module",
-            "compatibility": {
-                "minimum": "1.0.0.0",
-                "verified": "1.12.6.0"
-            }
-        }, 
+          "id": "lib-wrapper",
+          "type": "module",
+          "compatibility": 
+          {
+            "minimum": "1.0.0.0",
+            "verified": "1.12.6.0"
+          }
+        },
         {
-          "name": "fvtt-color-picker",
-          "type": "library",
-          "manifest": "https://github.com/Larkinabout/fvtt-color-picker/releases/download/1.4/module.json"
-    }
+          "id": "lib - Color Settings",
+          "type": "module",
+          "compatibility": {
+            "minimum": "1.0.0",
+            "verified": "3.0.4"
+          }
+        }
     ]
   }
 }

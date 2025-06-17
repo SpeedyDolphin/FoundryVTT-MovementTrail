@@ -65,41 +65,47 @@ function colorScheme(){
     const selectedValue = game.settings.get("athenas-movement-trail", "movementUsageColorScheme");
     toggleCustomFields(selectedValue);
   });
-
-
-
-  game.settings.register("athenas-movement-trail", "custom-color1", {
-    name: "Custom color 1",
-    hint: "The first color the movement indicator uses. Please use hex code",
-    scope: "client",       // or "world" depending on your use case
-    config: true,          // show in settings UI
-    default: '0x00ff00',
-    type: String
-  });
-  game.settings.register("athenas-movement-trail", "custom-color2", {
-    name: "Custom color 2",
-    hint: "The second color the movement indicator uses. Please use hex code",
-    scope: "client",       // or "world" depending on your use case
-    config: true,          // show in settings UI
-    default: '0xffff00',
-    type: String
-  });
-  game.settings.register("athenas-movement-trail", "custom-color3", {
-    name: "Custom color 3",
-    hint: "The third color the movement indicator uses. Please use hex code",
-    scope: "client",       // or "world" depending on your use case
-    config: true,          // show in settings UI
-    default: '0xffa500',
-    type: String
-  });
-  game.settings.register("athenas-movement-trail", "custom-color4", {
-    name: "Custom color 4",
-    hint: "The fourth color the movement indicator uses. Please use hex code",
-    scope: "client",       // or "world" depending on your use case
-    config: true,          // show in settings UI
-    default: '0xff0000',
-    type: String
-  });
+  //                                     module        key             options
+  new window.Ardittristan.ColorSetting("athenas-movement-trail", "customColor1", {
+    name: "Custom Color 1",           // The name of the setting in the settings menu
+    hint: "The first color the movement indicator uses",        // A description of the registered setting and its behavior
+    label: "Color Picker",              // The text label used in the button
+    restricted: false,                  // Restrict this setting to gamemaster only?
+    defaultColor: "#00ff00ff",          // The default color of the setting
+    scope: "client",                    // The scope of the setting
+    onChange: (value) => {},            // A callback function which triggers when the setting is changed
+    insertAfter: "athenas-movement-trail.movementUsageColorScheme"   // If supplied it will place the setting after the supplied setting
+  })
+  new window.Ardittristan.ColorSetting("athenas-movement-trail", "customColor2", {
+    name: "Custom Color 2",           // The name of the setting in the settings menu
+    hint: "The second color the movement indicator uses",        // A description of the registered setting and its behavior
+    label: "Color Picker",              // The text label used in the button
+    restricted: false,                  // Restrict this setting to gamemaster only?
+    defaultColor: "#ffff00ff",          // The default color of the setting
+    scope: "client",                    // The scope of the setting
+    onChange: (value) => {},            // A callback function which triggers when the setting is changed
+    insertAfter: "athenas-movement-trail.customColor1"   // If supplied it will place the setting after the supplied setting
+  })
+  new window.Ardittristan.ColorSetting("athenas-movement-trail", "customColor3", {
+    name: "Custom Color 3",           // The name of the setting in the settings menu
+    hint: "The third color the movement indicator uses",        // A description of the registered setting and its behavior
+    label: "Color Picker",              // The text label used in the button
+    restricted: false,                  // Restrict this setting to gamemaster only?
+    defaultColor: "#ffa500ff",          // The default color of the setting
+    scope: "client",                    // The scope of the setting
+    onChange: (value) => {},            // A callback function which triggers when the setting is changed
+    insertAfter: "athenas-movement-trail.customColor2"   // If supplied it will place the setting after the supplied setting
+  })
+  new window.Ardittristan.ColorSetting("athenas-movement-trail", "customColor4", {
+    name: "Custom Color 4",           // The name of the setting in the settings menu
+    hint: "The fourth color the movement indicator uses",        // A description of the registered setting and its behavior
+    label: "Color Picker",              // The text label used in the button
+    restricted: false,                  // Restrict this setting to gamemaster only?
+    defaultColor: "#ff0000ff",          // The default color of the setting
+    scope: "client",                    // The scope of the setting
+    onChange: (value) => {},            // A callback function which triggers when the setting is changed
+    insertAfter: "athenas-movement-trail.customColor3"   // If supplied it will place the setting after the supplied setting
+  })
 } 
 function minOwnership(){
     game.settings.register("athenas-movement-trail", "ownershipLevel", {
