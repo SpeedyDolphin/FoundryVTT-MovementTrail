@@ -2,7 +2,7 @@
 import { renderCombatantTrail} from "./render.js";
 
 let combatants = {};
-let rulerMovingCombatants = {} // I don't think this does much but I suppose it's a nice mutex just in case
+let rulerMovedCombatants= new Set(); //stupid race conditions
 let untrackedCombatants = new Set(); // This will hold the ids of combatants that are not currently in the combat tracker but have moved. Resets at top of the round.
 let canCondensePaths = true; // This is a global variable that can be toggled to enable or disable path condensing
 //This function adds a new token to the tracker or clears data from the previous round
@@ -34,16 +34,11 @@ function isCombatantInCombatTracker(tokenId) {
 }
 
 export async function updateTrail(tokenId, changes, userId) {
-    if(tokenId in rulerMovingCombatants){
-        console.log(`Currently moving via ruler. Normal update trail blocked. Value ${rulerMovingCombatants[tokenId]}`)
-        rulerMovingCombatants[tokenId] -= 1; 
-        if(rulerMovingCombatants[tokenId] === 0){
-            delete rulerMovingCombatants[tokenId]
-            console.log("Token unlocked")
-        }
-        return
+    console.log(`Normal updateTrail triggering`);
+    if (rulerMovedCombatants.has(tokenId)) {
+        console.log(`Update trail for token ${tokenId} is currently being updated by the ruler, skipping.`);
+        return;
     }
-    
     //check if the token is being tracked add it if not
     if (combatants[tokenId] === undefined){
         offTurn_registerCombatant(tokenId)
@@ -74,12 +69,19 @@ export async function updateTrail(tokenId, changes, userId) {
       
     //render
     renderCombatantTrail(tokenId, combatants[tokenId].trail, userId); 
-
+    console.log(`Normal updateTrail end`);
 }
 
 //Segments: ['ray':{"A":{'x':num, 'y':num}, B:{'x':num, 'y':num}}, teleport: boolean]
-export function rulerUpdateTrail(tokenId, segments, userId) {
-    rulerMovingCombatants[tokenId] = segments.length
+export async function rulerUpdateTrail(tokenId, segments, userId, resultPromise) {
+    console.log('Update trail from ruler start');
+    rulerMovedCombatants.add(tokenId); // prevent race conditions
+    const movementSuccessful = await resultPromise;
+    if (!movementSuccessful) {
+        console.log("Movement blocked by wall or other obstacle, not updating trail.");
+        return;
+    }
+
     if (combatants[tokenId] === undefined){
         offTurn_registerCombatant(tokenId)
     }
@@ -92,8 +94,7 @@ export function rulerUpdateTrail(tokenId, segments, userId) {
 
 
         for(let j = 1; j < points.length; j++){
-            // Do something with element
-            console.log(`Points along path (${points[j].x}, ${points[j].y})`)
+            //console.log(`Adding (${points[j].x}, ${points[j].y})`)
             const movementData = getMovementDataFromPoints(points[j-1], points[j])
             combatants[tokenId].trail.push(movementData);
             combatants[tokenId].total_moved += movementData.cost; 
@@ -107,6 +108,8 @@ export function rulerUpdateTrail(tokenId, segments, userId) {
     }
     console.log(combatants);
     renderCombatantTrail(tokenId, combatants[tokenId].trail, userId); 
+    console.log('Update trail from ruler end');
+    rulerMovedCombatants.delete(tokenId); // allow other updates
 }
 
 export function showTrail(tokenId){
@@ -132,9 +135,7 @@ function getMovementData(changes, tokenId){
 }
 // 'a' and 'b' are both points representing the current grid position {'x': num, 'y':num}
 function getMovementDataFromPoints(a, b){
-    console.log(b)
     const movement = canvas.grid.measurePath([gridToPoint(a), gridToPoint(b)], { gridSpaces: true });
-    console.log(movement)
     return {
         'pixel': gridToPoint(b),
         'grid': {'x':b.y, "y": b.x}, // idk why they're swapped but they are. If it bricks after a foundry update this may be the cause? 
@@ -185,6 +186,13 @@ function isWalledOff(coordA, coordB) {
         {type: "move"}
     );
     return wallCheck.length > 0;
+}
+function checkTokenCollision(tokenId, a, b){
+    let token = canvas.tokens.get(tokenId);
+    let modifiedB = {'x': b.x + canvas.grid.size/2, 'y': b.y + canvas.grid.size/2}; // Adjust for the center of the grid square
+    let result = token.checkCollision(modifiedB, {type: "move", "mode": "any"});
+    console.log("Result of checkTokenCollision",result)
+    return result
 }
 
 export function resetUntracked() {
@@ -243,9 +251,7 @@ function gridToPoint(point){
     return {'x': converted[0], 'y':converted[1]}
 }
 
-function isAdjacent(coordA, coordB) {
-  console.log(coordA)
-  console.log(coordB)  
+function isAdjacent(coordA, coordB) { 
   const dx = Math.abs(coordA.grid.x - coordB.grid.x);
   const dy = Math.abs(coordA.grid.y - coordB.grid.y);
 

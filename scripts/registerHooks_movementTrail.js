@@ -27,7 +27,7 @@ Hooks.on("updateToken", async (token, changes, options, userId) => {
 
 Hooks.on("updateCombat", async (combat, changed) => {
     console.log("Athena's Movement Trail | Update Combat Hook Triggered");
-    if(combat.combatant.token !== undefined) // this is a guard for when no one has rolled initiative but the tracker is advanced anyways.  
+    if(combat.combatant !== undefined) // this is a guard for when no one has rolled initiative but the tracker is advanced anyways.  
       registerCombatant(combat.combatant.token.id, combat.combatant.actor.id, combat.round);
 
     if (changed.round) {
@@ -71,12 +71,14 @@ function setKeybindings(){
 
 function monkeyPatchRuler(){
   libWrapper.register("athenas-movement-trail","Ruler.prototype.moveToken",
-    function (...args) {
+    function (wrapped, ...args) {
       console.log(`Token moved using ruler`);
-      console.log(this.segments);      
-      rulerUpdateTrail(this.token.id, this.segments, this.user.id);
-      return;
+      console.log(this.segments);
+      let result = wrapped(...args);  
+      rulerUpdateTrail(this.token.id, this.segments, this.user.id, result);
+      
+      return result;
     },
-    "LISTENER"
+    "WRAPPER"
   );
 }

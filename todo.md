@@ -4,7 +4,7 @@
     - [X] delete the save data upon end of combat 
 - [ ] Add footprints to show direction and if movement requires dashing and so on 
     - [ ] add a way to customize per token the footprint icon
-    - [ ] add a way to choose custom colors 
+    - [x] add a way to choose custom colors 
 - [X] Take into account the character's actual movement speed. 
     - [X] Make the path to the movement speed customizable to the game system
 - [X] Test to see if movement was caused by the ruler function or drag/teleport.                        
@@ -22,7 +22,9 @@
 
 BUGS:
 - [ ] Does not sync properly when the tab is inactive
-- [X] Will merge the path without taking into account walls 
-   - [ ] Does not account for large creatures. Will only take the middle of the top left square into account.  
 - [ ] point to grid occasionally breaks when spamming arrow keys. Potentially not calling the snapping funtion first? 
       Pixel coordinates appear to  be stable
+- [X] Will merge the path without taking into account walls 
+   - [ ] Does not account for large creatures. Will only take the middle of the top left square into account.  
+- [X] Movement via ruler that was blocked by walls was still added as if the movement went though. 
+      Fixed the race condition that properly implementing this caused 
