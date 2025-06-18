@@ -75,8 +75,9 @@ function monkeyPatchRuler(){
       console.log(`Token moved using ruler`);
       console.log(this.segments);
       let result = wrapped(...args);  
-      rulerUpdateTrail(this.token.id, this.segments, this.user.id, result);
-      
+      if(this.token?.id !== undefined){
+        rulerUpdateTrail(this.token.id, this.segments, this.user.id, result);
+      }
       return result;
     },
     "WRAPPER"

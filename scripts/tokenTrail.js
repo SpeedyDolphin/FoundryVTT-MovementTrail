@@ -79,6 +79,7 @@ export async function rulerUpdateTrail(tokenId, segments, userId, resultPromise)
     const movementSuccessful = await resultPromise;
     if (!movementSuccessful) {
         console.log("Movement blocked by wall or other obstacle, not updating trail.");
+        rulerMovedCombatants.delete(tokenId); // allow other updates
         return;
     }
 
