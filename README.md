@@ -2,7 +2,7 @@
 ## Athena's Token Trail 
 A Foundry VTT module that shows a trail for the movement a token does in a round of combat.  
 
-![image](images\ModuleDemo.png)
+![image](https://raw.githubusercontent.com/SpeedyDolphin/FoundryVTT-MovementTrail/refs/heads/dev/images/ModuleDemo.png)
 
 ### Usage
 This module tracks movement done by pressing the arrows keys (or equivalent) or by the ruler. It does not track any movement done by picking up the token and dragging it if it moves more than 1 square. This is to facilitate teleports not being tracked. The trail automatically fades after 3 seconds. Who can view the trail is determined by the ownership level of the token. By default a player with limited ownership will be able to see the trail. 
@@ -16,6 +16,7 @@ By default the movement path supports backtracking and will merge diagonals
 ##### Keybinds
 Show path ```v```:
 - Shows the path for the token currently selected. 
+
 Toggle path condensing ```b```:
 - When enabled, the movement trail will not automatically backtrack or merge diagonals. This is helpful if there's a specific square you want to move to or want going back over the trail while still tracking movement. 
 
@@ -28,6 +29,7 @@ This module was inspired by [Aeris Tokens](https://foundryvtt.com/packages/aeris
 
 Thank you to all my friends and players who have heard me talk about this module for the past few weeks. 
 Also thank you to you for checking this out! If you'd like to help out a broke college graduate feel free to buy me a coffee. 
+
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/speedydolphin)
 
 ### Support
