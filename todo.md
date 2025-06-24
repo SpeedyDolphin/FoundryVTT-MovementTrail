@@ -14,7 +14,7 @@
 - [X] ~~Hide movements done by dm~~ Restrict movement to users with a certain level of token ownership 
 - [X] check to see how it handles switching scenes mid combat
 - [X] Make a button that turns off auto backtracking 
-- [ ] Make a proper read me
+- [X] Make a proper read me
 - [ ] Find a way to hide fields in foundry setting page. 
 - [ ] If a combatant is removed from the turn tracker, add it to the list of untracked combatants 
 
@@ -22,9 +22,11 @@
 
 BUGS:
 - [ ] Does not sync properly when the tab is inactive
-- [ ] point to grid occasionally breaks when spamming arrow keys. Potentially not calling the snapping funtion first? 
+- [ ] point to grid occasionally breaks when spamming arrow keys. Potentially not calling the snapping function first? 
       Pixel coordinates appear to  be stable
+      Bug seems to happen when pressing 3 buttons simultaneously 
 - [X] Will merge the path without taking into account walls 
    - [ ] Does not account for large creatures. Will only take the middle of the top left square into account.  
 - [X] Movement via ruler that was blocked by walls was still added as if the movement went though. 
-      Fixed the race condition that properly implementing this caused 
+      Fixed the race condition that properly implementing this caused
+- [ ] If combatant has not been registered the ruler movement does not work.   

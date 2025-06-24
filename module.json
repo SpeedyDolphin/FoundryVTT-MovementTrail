@@ -29,7 +29,7 @@
           }
         },
         {
-          "id": "lib - Color Settings",
+          "id": "colorsettings",
           "type": "module",
           "compatibility": {
             "minimum": "1.0.0",
