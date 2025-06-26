@@ -16,7 +16,11 @@
 - [X] Make a button that turns off auto backtracking 
 - [X] Make a proper read me
 - [ ] Find a way to hide fields in foundry setting page. 
-- [ ] If a combatant is removed from the turn tracker, add it to the list of untracked combatants 
+- [X] If a combatant is removed from the turn tracker, add it to the list of untracked combatants
+- [ ] Update colision checking to use Foundry's method. 
+
+Would be nice 
+- [ ] Update module to use sockets instead of each person tracking the state. 
 
 
 

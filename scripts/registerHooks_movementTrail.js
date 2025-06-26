@@ -1,4 +1,4 @@
-import { registerCombatant, updateTrail, showTrail, resetUntracked, saveData, loadData, clearData, rulerUpdateTrail, togglePathCondensing} from "./tokenTrail.js";
+import { registerCombatant, updateTrail, showTrail, resetUntracked, saveData, loadData, clearData, rulerUpdateTrail, togglePathCondensing, addToUntracked} from "./tokenTrail.js";
 import { registerSettings } from "./settings.js";
 import { renderInit } from "./render.js";
 
@@ -39,8 +39,12 @@ Hooks.on("updateCombat", async (combat, changed) => {
 
 Hooks.on("deleteCombat", (combat, options, userId) => {
   console.log("Combat has ended!");
-  // Your cleanup or post-combat logic here
   clearData(); // Clear all data when combat ends
+});
+Hooks.once("deleteCombatant", (combatant, options, userId) => {
+  console.log(`Combatant ${combatant.name} was removed from combat.`);
+  addToUntracked(combatant.token.id);
+  saveData(); //only the gm user saves the data
 });
 
 function setKeybindings(){

@@ -32,6 +32,9 @@ function isCombatantInCombatTracker(tokenId) {
     // Check if the token is in the combat tracker
     return game.combat.combatants.some(c => c.token.id === tokenId);
 }
+export function addToUntracked(tokenId){
+    untrackedCombatants.add(tokenId);
+}
 
 export async function updateTrail(tokenId, changes, userId) {
     console.log(`Normal updateTrail triggering`);
@@ -79,7 +82,7 @@ export async function rulerUpdateTrail(tokenId, segments, userId, resultPromise)
     if (combatants[tokenId] === undefined){
         offTurn_registerCombatant(tokenId)
     }
-    
+
     const movementSuccessful = await resultPromise;
 
     if (!movementSuccessful) {
