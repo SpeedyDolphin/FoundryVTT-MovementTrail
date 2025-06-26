@@ -19,7 +19,7 @@ Hooks.on("canvasReady", async () => {
 Hooks.on("updateToken", async (token, changes, options, userId) => {
     console.log("Athena's Movement Trail | Update Token Hook Triggered");    
     // Check if position changed
-    if (game.combat && ("x" in changes || "y" in changes)) {
+    if (game.combat && ("x" in changes || "y" in changes) && game.combat.combatants.size !== 0) {
       updateTrail(token.id, changes, userId);
       saveData(); //only the gm user saves the data
     }
