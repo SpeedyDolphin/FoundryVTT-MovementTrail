@@ -76,15 +76,16 @@ export async function updateTrail(tokenId, changes, userId) {
 export async function rulerUpdateTrail(tokenId, segments, userId, resultPromise) {
     console.log('Update trail from ruler start');
     rulerMovedCombatants.add(tokenId); // prevent race conditions
+    if (combatants[tokenId] === undefined){
+        offTurn_registerCombatant(tokenId)
+    }
+    
     const movementSuccessful = await resultPromise;
+
     if (!movementSuccessful) {
         console.log("Movement blocked by wall or other obstacle, not updating trail.");
         rulerMovedCombatants.delete(tokenId); // allow other updates
         return;
-    }
-
-    if (combatants[tokenId] === undefined){
-        offTurn_registerCombatant(tokenId)
     }
     for(let i = 0; i< segments.length; i++)
     {

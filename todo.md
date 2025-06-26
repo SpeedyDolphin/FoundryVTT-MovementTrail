@@ -29,4 +29,4 @@ BUGS:
    - [ ] Does not account for large creatures. Will only take the middle of the top left square into account.  
 - [X] Movement via ruler that was blocked by walls was still added as if the movement went though. 
       Fixed the race condition that properly implementing this caused
-- [ ] If combatant has not been registered the ruler movement does not work.   
+- [X] If combatant has not been registered the ruler movement does not work.   
