@@ -1,5 +1,6 @@
-import { registerCombatant, updateTrail, showTrail, resetUntracked, saveData, loadData, clearData, rulerUpdateTrail, togglePathCondensing, addToUntracked} from "./tokenTrail.js";
-import { registerSettings } from "./settings.js";
+import { registerCombatant, updateTrail,resetUntracked, saveData, loadData, clearData, rulerUpdateTrail, addToUntracked} from "./tokenTrail.js";
+import { registerSettings } from "./config/settings.js";
+import { setKeybindings } from "./config/keybinds.js";
 import { renderInit } from "./render.js";
 
 Hooks.once('init', async function() {
@@ -46,32 +47,6 @@ Hooks.once("deleteCombatant", (combatant, options, userId) => {
   addToUntracked(combatant.token.id);
   saveData(); //only the gm user saves the data
 });
-
-function setKeybindings(){
-  game.keybindings.register("athenas-movement-trail", "showTrail", {
-    name: "Show Movement Trail",
-    hint: "Shows the movement trail of the selected token.",
-    restricted: false,
-    editable: [{ key: "KeyV" }],
-    onDown: () => {
-      const token = canvas.tokens.controlled[0];
-      if (token && game.combat.active === true) {
-          showTrail(token.id);
-      }
-      console.log("Athena's Movement Trail | V Keybinding Triggered");
-    },
-  });
-  game.keybindings.register("athenas-movement-trail", "pathCondensingToggle", {
-    name: "Toggle Path Condensing",
-    hint: "When enabled, the movement trail will not automatically backtrack or merge diagonals.",
-    restricted: false,
-    editable: [{ key: "KeyB" }],
-    onDown: () => {
-      togglePathCondensing();
-      console.log("Athena's Movement Trail | B Keybinding Triggered");
-    },
-  });
-}
 
 function monkeyPatchRuler(){
   libWrapper.register("athenas-movement-trail","Ruler.prototype.moveToken",
