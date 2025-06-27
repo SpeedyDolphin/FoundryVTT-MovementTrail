@@ -17,15 +17,16 @@
 - [X] Make a proper read me
 - [ ] Find a way to hide fields in foundry setting page. 
 - [X] If a combatant is removed from the turn tracker, add it to the list of untracked combatants
+- [ ] Add way to turn off movement tracking 
 - [ ] Update colision checking to use Foundry's method. 
 
 Would be nice 
-- [ ] Update module to use sockets instead of each person tracking the state. 
+- [X] Update module to use sockets instead of each person tracking the state. 
 
 
 
 BUGS:
-- [ ] Does not sync properly when the tab is inactive
+- [X] Does not sync properly when the tab is inactive
 - [ ] point to grid occasionally breaks when spamming arrow keys. Potentially not calling the snapping function first? 
       Pixel coordinates appear to  be stable
       Bug seems to happen when pressing 3 buttons simultaneously 
@@ -34,3 +35,4 @@ BUGS:
 - [X] Movement via ruler that was blocked by walls was still added as if the movement went though. 
       Fixed the race condition that properly implementing this caused
 - [X] If combatant has not been registered the ruler movement does not work.   
+- [ ] Running into walls cause the last space to cost 0 movement

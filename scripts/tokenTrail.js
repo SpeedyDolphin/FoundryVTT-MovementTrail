@@ -6,6 +6,7 @@ let combatants = {};
 let rulerMovedCombatants= new Set(); //stupid race conditions
 let untrackedCombatants = new Set(); // This will hold the ids of combatants that are not currently in the combat tracker but have moved. Resets at top of the round.
 let canCondensePaths = true; // This is a global variable that can be toggled to enable or disable path condensing
+let canTrack = true; 
 //This function adds a new token to the tracker or clears data from the previous round
 export function registerCombatant(tokenId, actorId, round) {
     //Sets the combatant's initial position on it's turn. Does not update if moving backwards in the turn tracker 
@@ -39,16 +40,21 @@ export function addToUntracked(tokenId){
 
 export async function updateTrail(tokenId, changes, userId) {
     console.log(`Normal updateTrail triggering`);
-    if (rulerMovedCombatants.has(tokenId)) {
-        console.log(`Update trail for token ${tokenId} is currently being updated by the ruler, skipping.`);
+    if (rulerMovedCombatants.has(tokenId) || !canTrack) {
+        console.log(`Update trail for token ${tokenId} is currently being updated by the ruler or is on pause due to toggle, skipping.`);
         return;
     }
+    await loadData(); 
     //check if the token is being tracked add it if not
     if (combatants[tokenId] === undefined){
         offTurn_registerCombatant(tokenId)
     } 
-    await loadData(); 
+    
     const movementData = getMovementData(changes, tokenId);
+    if (movementData.distance === 0) {
+        console.log(`Token ${tokenId} did not move, skipping trail update.`);
+        return; // No movement, no need to update the trail
+    }
     
     if (movementData.distance > canvas.scene.grid.distance){
         console.log('throwing a hissy fit for no good reason')
@@ -58,6 +64,10 @@ export async function updateTrail(tokenId, changes, userId) {
         combatants[tokenId].trail.push(movementData);
         combatants[tokenId].trail.at(-1).cost = 0; // Set the cost to 0 for non-adjacent movements
         backtracking(tokenId);
+
+        //render
+        socket.executeAsGM(saveData, tokenId, combatants[tokenId])
+        socket.executeForEveryone(renderCombatantTrail, tokenId, combatants[tokenId].trail, userId); 
         return
     }
     
@@ -80,11 +90,17 @@ export async function updateTrail(tokenId, changes, userId) {
 //Segments: ['ray':{"A":{'x':num, 'y':num}, B:{'x':num, 'y':num}}, teleport: boolean]
 export async function rulerUpdateTrail(tokenId, segments, userId, resultPromise) {
     console.log('Update trail from ruler start');
+    if (!canTrack){
+        console.log(`Update trail for token ${tokenId} is currently on pause due to toggle, skipping.`);
+        return;
+    }
+
     rulerMovedCombatants.add(tokenId); // prevent race conditions
+    await loadData(); // Load the latest data to ensure we have the most up-to-date combatants
     if (combatants[tokenId] === undefined){
         offTurn_registerCombatant(tokenId)
     }
-    await loadData(); // Load the latest data to ensure we have the most up-to-date combatants
+    
     const movementSuccessful = await resultPromise;
 
     if (!movementSuccessful) {
@@ -218,8 +234,13 @@ export function togglePathCondensing() {
     canCondensePaths = !canCondensePaths;
     console.log(`Path condensing is now ${canCondensePaths ? 'enabled' : 'disabled'}`);
 }
+export function toggleMovementTracking() {
+    canTrack = !canTrack;
+    console.log(`Tracking is now ${canTrack ? 'enabled' : 'disabled'}`);
+}
 //Save data
 export async function saveData(tokenId, updatedData){
+    console.log("Athena's Movement Trail | Saving data");
     if (game.user.isGM === false) {
         return;
     }

@@ -1,8 +1,9 @@
-import {showTrail, togglePathCondensing} from "../tokenTrail.js";
+import {showTrail, togglePathCondensing, toggleMovementTracking} from "../tokenTrail.js";
 
 export function setKeybindings(){
   setShowTrailKeybinding(); // Default: V
   setPathCondensingToggleKeybinding(); // Default: B
+  setMovementTrackingToggleKeybinding(); // Default: Alt + B
 }
 
 function setShowTrailKeybinding(){
@@ -29,6 +30,18 @@ function setPathCondensingToggleKeybinding(){
     onDown: () => {
       togglePathCondensing();
       console.log("Athena's Movement Trail | B Keybinding Triggered");
+    },
+  });
+}
+function setMovementTrackingToggleKeybinding(){
+  game.keybindings.register("athenas-movement-trail", "movementTrackingToggle", {
+    name: "Toggle Movement Tracking",
+    hint: "When enabled, the movement trail will not take into account token movement.",
+    restricted: false,
+    editable: [{ key: "KeyB", modifiers: ["Alt"] }],
+    onDown: () => {
+      toggleMovementTracking();
+      console.log("Athena's Movement Trail | alt + B Keybinding Triggered");
     },
   });
 }
