@@ -1,7 +1,9 @@
 import { registerCombatant, updateTrail,resetUntracked, saveData, loadData, clearData, rulerUpdateTrail, addToUntracked} from "./tokenTrail.js";
+import {renderCombatantTrail} from "./render.js"
 import { registerSettings } from "./config/settings.js";
 import { setKeybindings } from "./config/keybinds.js";
 import { renderInit } from "./render.js";
+
 
 Hooks.once('init', async function() {
   console.log("Athena's Movement Trail | Initializing");
@@ -11,18 +13,24 @@ Hooks.once('init', async function() {
   monkeyPatchRuler();
 });
 
+export let socket;
+Hooks.once("socketlib.ready", () => {
+  socket = socketlib.registerModule("athenas-movement-trail");
+  socket.register("render", renderCombatantTrail);
+  socket.register("saveData", saveData);
+});
+
 Hooks.on("canvasReady", async () => {
   console.log("Athena's Movement Trail | Canvas Ready Hook Triggered");
   renderInit();
   loadData();
 });
 
-Hooks.on("updateToken", async (token, changes, options, userId) => {
+Hooks.on("preUpdateToken", async (token, changes, options, userId) => {
     console.log("Athena's Movement Trail | Update Token Hook Triggered");    
     // Check if position changed
     if (game.combat && ("x" in changes || "y" in changes) && game.combat.combatants.size !== 0) {
       updateTrail(token.id, changes, userId);
-      saveData(); //only the gm user saves the data
     }
 });
 

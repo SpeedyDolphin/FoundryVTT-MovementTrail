@@ -3,6 +3,7 @@
   "title": "Athena's Movement Trail",
   "description": "A module that adds a movement trail to tokens during active combat",
   "version": "0.1.0",
+  "socket": true,
   "compatibility": {
     "minimum": 12,
     "verified": 12.331
@@ -35,6 +36,12 @@
             "minimum": "1.0.0",
             "verified": "3.0.4"
           }
+        }, 
+        {
+          "id": "socketlib",
+          "type": "module",
+          "manifest": "https://github.com/farling42/foundryvtt-socketlib/releases/latest/download/module.json",
+          "compatibility": {}
         }
     ]
   }

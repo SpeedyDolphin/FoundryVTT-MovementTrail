@@ -61,11 +61,7 @@ function colorScheme(){
       "custom": "Custom",
     },
   });
-  Hooks.on("renderSettingsConfig", (app, html, data) => {
-    const selectedValue = game.settings.get("athenas-movement-trail", "movementUsageColorScheme");
-    toggleCustomFields(selectedValue);
-  });
-  //                                     module        key             options
+  
   new window.Ardittristan.ColorSetting("athenas-movement-trail", "customColor1", {
     name: "Custom Color 1",           // The name of the setting in the settings menu
     hint: "The first color the movement indicator uses",        // A description of the registered setting and its behavior
@@ -139,18 +135,3 @@ function setMovementPath(){
     type: String
   });
 }
-function toggleCustomFields(selectedValue) {
-  console.log("I DID NOTHING :D")
-  const el = document.querySelector('[name="my-module.optionSelector"]')?.closest(".form-group");
-  if (!el) return;
-
-  let sibling = el.nextElementSibling;
-  for (let i = 0; i < 4 && sibling; i++) {
-    if (sibling.classList.contains("form-group")) {
-      sibling.style.display = selectedValue === "custom" ? "" : "none";
-    }
-    sibling = sibling.nextElementSibling;
-  }
-}
-
-

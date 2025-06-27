@@ -1,5 +1,6 @@
 
 import { renderCombatantTrail} from "./render.js";
+import { socket } from "./registerHooks_movementTrail.js";
 
 let combatants = {};
 let rulerMovedCombatants= new Set(); //stupid race conditions
@@ -46,7 +47,7 @@ export async function updateTrail(tokenId, changes, userId) {
     if (combatants[tokenId] === undefined){
         offTurn_registerCombatant(tokenId)
     } 
-
+    await loadData(); 
     const movementData = getMovementData(changes, tokenId);
     
     if (movementData.distance > canvas.scene.grid.distance){
@@ -71,7 +72,8 @@ export async function updateTrail(tokenId, changes, userId) {
     console.log(combatants);
       
     //render
-    renderCombatantTrail(tokenId, combatants[tokenId].trail, userId); 
+    socket.executeAsGM(saveData, tokenId, combatants[tokenId])
+    socket.executeForEveryone(renderCombatantTrail, tokenId, combatants[tokenId].trail, userId); 
     console.log(`Normal updateTrail end`);
 }
 
@@ -82,7 +84,7 @@ export async function rulerUpdateTrail(tokenId, segments, userId, resultPromise)
     if (combatants[tokenId] === undefined){
         offTurn_registerCombatant(tokenId)
     }
-
+    await loadData(); // Load the latest data to ensure we have the most up-to-date combatants
     const movementSuccessful = await resultPromise;
 
     if (!movementSuccessful) {
@@ -112,12 +114,14 @@ export async function rulerUpdateTrail(tokenId, segments, userId, resultPromise)
         }
     }
     console.log(combatants);
-    renderCombatantTrail(tokenId, combatants[tokenId].trail, userId); 
+    socket.executeAsGM(saveData, tokenId, combatants[tokenId])
+    socket.executeForEveryone(renderCombatantTrail, tokenId, combatants[tokenId].trail, userId);
     console.log('Update trail from ruler end');
     rulerMovedCombatants.delete(tokenId); // allow other updates
 }
 
-export function showTrail(tokenId){
+export async function showTrail(tokenId){
+    await loadData();
     if (combatants[tokenId] === undefined) {
         return;
     }
@@ -215,13 +219,18 @@ export function togglePathCondensing() {
     console.log(`Path condensing is now ${canCondensePaths ? 'enabled' : 'disabled'}`);
 }
 //Save data
-export async function saveData(){
-    if (game.user.isGM === true) {
-        await game.scenes.active.setFlag("athenas-movement-trail", "movementTrailData", {
-            combatants: combatants,
-            untrackedCombatants: Array.from(untrackedCombatants)
-        });
+export async function saveData(tokenId, updatedData){
+    if (game.user.isGM === false) {
+        return;
     }
+
+    if (tokenId !== undefined){
+        combatants[tokenId] = updatedData;
+    }
+    await game.scenes.active.setFlag("athenas-movement-trail", "movementTrailData", {
+        combatants: combatants,
+        untrackedCombatants: Array.from(untrackedCombatants)
+    });
 }
 export async function loadData() {
     const data = await game.scenes.active.getFlag("athenas-movement-trail", "movementTrailData");
