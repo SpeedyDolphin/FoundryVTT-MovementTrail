@@ -70,7 +70,7 @@ function drawTrail(trail, container, color, tokenId){
     let cost = 0
     for (let i = 0; i < trail.length; i++){
         cost = Math.round(cost + trail[i].cost ?? 0); // rounding to avoid floating point issues
-        drawSquare(trail[i].pixel.x, trail[i].pixel.y, color, String(cost), container)
+        drawSquare(trail[i].pixel.x, trail[i].pixel.y, color, String(cost), container, (trail[i].cost === 0 && i !== 0))
         movementUsageIndicator(trail[i].pixel.x, trail[i].pixel.y, cost, container, tokenId); 
      }
      console.log(`Total travel cost ${cost}`);
@@ -106,7 +106,7 @@ function drawBasicMovementUsageIndicator(x, y,currentCost, container, tokenId){
     container.addChild(square);
 }    
 //x, y should be the coordinates for the top left corner 
-function drawSquare(x, y, color, number, container){
+function drawSquare(x, y, color, number, container, teleport){
     const gridSize = canvas.grid.size
     
     //Draw Square
@@ -121,7 +121,7 @@ function drawSquare(x, y, color, number, container){
     container.addChild(square);
     
     // Add label 
-    if (number){
+    if (number && !teleport){
         //Make Text
         const text = new PIXI.Text(number, {
           fontFamily: game.settings.get("athenas-movement-trail", "font"),
@@ -135,6 +135,14 @@ function drawSquare(x, y, color, number, container){
         text.y = y + gridSize / 2;
         text.anchor.set(0.5)
         container.addChild(text);
+    }
+    else{
+        const teleportIcon = PIXI.Sprite.from("modules/athenas-movement-trail/images/daze.svg");
+        teleportIcon.x = x + gridSize / 2;
+        teleportIcon.y = y + gridSize /2;
+        teleportIcon.anchor.set(0.5);
+        teleportIcon.width = teleportIcon.height = gridSize / 3;
+        container.addChild(teleportIcon);
     }
 }
 

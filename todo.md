@@ -15,24 +15,25 @@
 - [X] check to see how it handles switching scenes mid combat
 - [X] Make a button that turns off auto backtracking 
 - [X] Make a proper read me
-- [ ] Find a way to hide fields in foundry setting page. 
 - [X] If a combatant is removed from the turn tracker, add it to the list of untracked combatants
-- [ ] Add way to turn off movement tracking 
+- [X] Add way to turn off movement tracking 
 - [ ] Update colision checking to use Foundry's method. 
 
 Would be nice 
 - [X] Update module to use sockets instead of each person tracking the state. 
+- [ ] Does not account for large creatures. Will only take the middle of the top left square into account. 
+- [ ] Find a way to hide fields in foundry setting page. 
 
 
 
 BUGS:
 - [X] Does not sync properly when the tab is inactive
-- [ ] point to grid occasionally breaks when spamming arrow keys. Potentially not calling the snapping function first? 
+- [?] point to grid occasionally breaks when spamming arrow keys. Potentially not calling the snapping function first? 
       Pixel coordinates appear to  be stable
       Bug seems to happen when pressing 3 buttons simultaneously 
-- [X] Will merge the path without taking into account walls 
-   - [ ] Does not account for large creatures. Will only take the middle of the top left square into account.  
+      Update: Bug seems to have been fixed after migrating to preUpdateToken hook. 
+- [X] Will merge the path without taking into account walls  
 - [X] Movement via ruler that was blocked by walls was still added as if the movement went though. 
       Fixed the race condition that properly implementing this caused
 - [X] If combatant has not been registered the ruler movement does not work.   
-- [ ] Running into walls cause the last space to cost 0 movement
+- [X] Running into walls cause the last space to cost 0 movement
