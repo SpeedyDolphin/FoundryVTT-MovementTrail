@@ -1,39 +1,72 @@
-import { registerCombatant, updateTrail, showTrail} from "./tokenTrail.js";
+import { registerCombatant, updateTrail,resetUntracked, saveData, loadData, clearData, rulerUpdateTrail, addToUntracked} from "./tokenTrail.js";
+import {renderCombatantTrail} from "./render.js"
+import { registerSettings } from "./config/settings.js";
+import { setKeybindings } from "./config/keybinds.js";
 import { renderInit } from "./render.js";
+
 
 Hooks.once('init', async function() {
   console.log("Athena's Movement Trail | Initializing");
 
-  game.keybindings.register("athenas-movement-trail", "showTrail", {
-    name: "Show Movement Trail",
-    hint: "Shows the movement trail of the selected token.",
-    restricted: true,
-    editable: [{ key: "KeyV" }],
-    onDown: () => {
-      const token = canvas.tokens.controlled[0];
-      if (token && game.combat.active === true) {
-          showTrail(token.id);
-      }
-      console.log("Athena's Movement Trail | Keybinding Triggered");
-    },
-  });
+  setKeybindings();
+  registerSettings();
+  monkeyPatchRuler();
 });
 
-Hooks.once("canvasReady", async () => {
+export let socket;
+Hooks.once("socketlib.ready", () => {
+  socket = socketlib.registerModule("athenas-movement-trail");
+  socket.register("render", renderCombatantTrail);
+  socket.register("saveData", saveData);
+});
+
+Hooks.on("canvasReady", async () => {
   console.log("Athena's Movement Trail | Canvas Ready Hook Triggered");
   renderInit();
+  loadData();
 });
 
-Hooks.on("updateToken", async (token, changes, options, userId) => {
+Hooks.on("preUpdateToken", async (token, changes, options, userId) => {
     console.log("Athena's Movement Trail | Update Token Hook Triggered");    
     // Check if position changed
-    if ("x" in changes || "y" in changes) {
+    if (game.combat && ("x" in changes || "y" in changes) && game.combat.combatants.size !== 0) {
       updateTrail(token.id, changes, userId);
-  }
+    }
 });
 
 Hooks.on("updateCombat", async (combat, changed) => {
     console.log("Athena's Movement Trail | Update Combat Hook Triggered");
-    registerCombatant(combat.combatant.token.id, combat.combatant.actor.id, combat.round);
+    if(combat.combatant !== undefined) // this is a guard for when no one has rolled initiative but the tracker is advanced anyways.  
+      registerCombatant(combat.combatant.token.id, combat.combatant.actor.id, combat.round);
+
+    if (changed.round) {
+        // Reset untracked combatants at the start of a new round
+        resetUntracked();
+    }
+    saveData(); //only the gm user saves the data
 });
 
+Hooks.on("deleteCombat", (combat, options, userId) => {
+  console.log("Combat has ended!");
+  clearData(); // Clear all data when combat ends
+});
+Hooks.once("deleteCombatant", (combatant, options, userId) => {
+  console.log(`Combatant ${combatant.name} was removed from combat.`);
+  addToUntracked(combatant.token.id);
+  saveData(); //only the gm user saves the data
+});
+
+function monkeyPatchRuler(){
+  libWrapper.register("athenas-movement-trail","Ruler.prototype.moveToken",
+    function (wrapped, ...args) {
+      console.log(`Token moved using ruler`);
+      console.log(this.segments);
+      let result = wrapped(...args);  
+      if(this.token?.id !== undefined){
+        rulerUpdateTrail(this.token.id, this.segments, this.user.id, result);
+      }
+      return result;
+    },
+    "WRAPPER"
+  );
+}

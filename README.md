@@ -1,71 +1,36 @@
-![](https://img.shields.io/badge/Foundry-v10-informational)
-<!--- Downloads @ Latest Badge -->
-<!--- replace <user>/<repo> with your username/repository -->
-<!--- ![Latest Release Download Count](https://img.shields.io/github/downloads/<user>/<repo>/latest/module.zip) -->
 
-<!--- Forge Bazaar Install % Badge -->
-<!--- replace <your-module-name> with the `name` in your manifest -->
-<!--- ![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2F<your-module-name>&colorB=4aa94a) -->
+# Athena's Token Trail 
+A Foundry VTT module that shows a trail for the movement a token does in a round of combat.  
 
+![image](https://raw.githubusercontent.com/SpeedyDolphin/FoundryVTT-MovementTrail/refs/heads/dev/images/ModuleDemo.png)
 
-# How to use this Template to create a versioned Release
+## Usage
+This module tracks movement done by pressing the arrows keys (or equivalent) or by the ruler. It does not track any movement done by picking up the token and dragging it if it moves more than 1 square. This is to facilitate teleports not being tracked. The trail automatically fades after 3 seconds. Who can view the trail is determined by the ownership level of the token. By default a player with limited ownership will be able to see the trail. 
 
-1. Open your repository's releases page.
+The count for each token resets once it reaches their turn in the combat tracker. If they are not in the combat tracker, they'll reset at top of the round. No movement is tracked if there is not an combat encounter.   
 
-![Where to click to open repository releases.](https://user-images.githubusercontent.com/7644614/93409301-9fd25080-f864-11ea-9e0c-bdd09e4418e4.png)
+The color for the path is chosen though assigned player character or the color of the user who moved it. The border changes color depending on how much speed the actor has used. If the border is black on the second square there is a high likelihood of the token not having a set walk speed.
+ 
+By default the movement path supports backtracking and will merge diagonals 
 
-2. Click "Draft a new release"
+### Keybinds
+Show path ```v```:
+- Shows the path for the token currently selected. 
 
-![Draft a new release button.](https://user-images.githubusercontent.com/7644614/93409364-c1333c80-f864-11ea-89f1-abfcb18a8d9f.png)
+Toggle path condensing ```b```:
+- When enabled, the movement trail will not automatically backtrack or merge diagonals. This is helpful if there's a specific square you want to move to or want going back over the trail while still tracking movement. 
 
-3. Fill out the release version as the tag name.
+### Setup 
+I tried to make this module system agnostic. As such you may have to configure the path to the actor movement speed. It is automatically set up for DnD5e, pathfinder, and A5e. If you'd like me to add a system lmk what the path is and I can add it.   
+Currently it only works on square grids. 
 
-If you want to add details at this stage you can, or you can always come back later and edit them.
+## Acknowledgements
+This module was inspired by [Aeris Tokens](https://foundryvtt.com/packages/aeris-tokens). It's a lovely module that shows a reachable tile grid based on movement speed, and you get a live path preview as you drag. It personally doesn't suit my needs and this module is likely incompatible with it. 
 
-![Release Creation Form](https://user-images.githubusercontent.com/7644614/93409543-225b1000-f865-11ea-9a19-f1906a724421.png)
+Thank you to all my friends and players who have heard me talk about this module for the past few weeks. 
+Also thank you to you for checking this out! If you'd like to help out a broke college graduate feel free to buy me a coffee. 
 
-4. Hit submit.
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/speedydolphin)
 
-5. Wait a few minutes.
-
-A Github Action will run to populate the `module.json` and `module.zip` with the correct urls that you can then use to distribute this release. You can check on its status in the "Actions" tab.
-
-![Actions Tab](https://user-images.githubusercontent.com/7644614/93409820-c1800780-f865-11ea-8c6b-c3792e35e0c8.png)
-
-6. Grab the module.json url from the release's details page.
-
-![image](https://user-images.githubusercontent.com/7644614/93409960-10c63800-f866-11ea-83f6-270cc5d10b71.png)
-
-This `module.json` will only ever point at this release's `module.zip`, making it useful for sharing a specific version for compatibility purposes.
-
-7. You can use the url `https://github.com/<user>/<repo>/releases/latest/download/module.json` to refer to the manifest.
-
-This is the url you want to use to install the module typically, as it will get updated automatically.
-
-# How to List Your Releases on Package Admin
-
-To request a package listing for your first release, go to the [Package Submission Form](https://foundryvtt.com/packages/submit) (accessible via a link at the bottom of the "[Systems and Modules](https://foundryvtt.com/packages/)" page on the Foundry website).
-
-Fill in the form. "Package Name" must match the name in the module manifest.  Package Title will be the display name for the package.  Package URL should be your repo URL.
-![image](https://user-images.githubusercontent.com/36359784/120664263-b49e5500-c482-11eb-9126-af7006389903.png)
-
-
-One of the Foundry staff will typically get back to you with an approval or any further questions within a few days, and give you access to the package admin pages.
-
-Once you have access to the [module admin page](https://foundryvtt.com/admin/packages/package/), you can release a new version by going into the page for your module, scrolling to the bottom, and filling in a new Package Version.
-
-When listing a new version, Version should be the version number you set above, and the Manifest URL should be the manifest __for that specific version__ (do not use /latest/ here).
-![image](https://user-images.githubusercontent.com/36359784/120664346-c4b63480-c482-11eb-9d8b-731b50d70939.png)
-
-> ### :warning: Important :warning:
-> 
-> It is very important that you use the specific release manifest url, and not the `/latest` url here. For more details about why this is important and how Foundry Installs/Updates packages, read [this wiki article](https://foundryvtt.wiki/en/development/guides/releases-and-history).
-
-Clicking "Save" in the bottom right will save the new version, which means that anyone installing your module from within Foundry will get that version, and a post will be generated in the #release-announcements channel on the official Foundry VTT Discord.
-
-
-# FoundryVTT Module
-
-Does something, probably
-
-## Changelog
+## Support
+For issues, bugs, or feature requests, please submit them via [GitHub Issues](https://github.com/SpeedyDolphin/FoundryVTT-MovementTrail/issues).
