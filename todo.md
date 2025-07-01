@@ -18,6 +18,7 @@
 - [X] If a combatant is removed from the turn tracker, add it to the list of untracked combatants
 - [X] Add way to turn off movement tracking 
 - [ ] Update colision checking to use Foundry's method. 
+- [ ] Add way to swap movement type per token
 
 Would be nice 
 - [X] Update module to use sockets instead of each person tracking the state. 

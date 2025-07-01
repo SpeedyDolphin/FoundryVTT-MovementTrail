@@ -1,0 +1,15 @@
+<div class="speed-panel">
+    {{#each speedData}}
+        <div class="speed-item">
+            <p>{{this.label}}: {{this.speed}}</p>
+            <div class="speed-multiplier">
+                <select name="speedMultiplier" class="speed-select">
+                    {{#each ../speed_multipliers}}
+                        <option value="{{this}}" {{#if (eq this ../multiplier)}}selected{{/if}}>x{{this}}</option>
+                    {{/each}}
+                </select>
+            </div>    
+             
+        </div>  
+    {{/each}}
+</div>

@@ -18,6 +18,9 @@
   "esmodules":[
     "scripts/registerHooks_movementTrail.js"
   ],
+  "styles": [
+    "styles/tokenHud.css"
+  ],
   "relationships": {
     "requires": [
         {
