@@ -19,7 +19,8 @@
     "scripts/registerHooks_movementTrail.js"
   ],
   "styles": [
-    "styles/tokenHud.css"
+    "styles/tokenHud.css",
+    "styles/settingMenu.css"
   ],
   "relationships": {
     "requires": [

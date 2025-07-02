@@ -3,6 +3,8 @@
 export function registerSettings(){
     // DM settings
     setMovementPath();
+    setMovementPathsMenu();
+    addTokenHUDButton();
     minOwnership();
 
     // Client Settings
@@ -119,6 +121,16 @@ function minOwnership(){
     },  
   });
 }
+function addTokenHUDButton(){
+  game.settings.register("athenas-movement-trail", "addTokenHUDButton", {
+    name: "Show Token HUD Button",
+    hint: "Adds a button to the token HUD to be able to change movement types.",
+    scope: "world",       // or "world" depending on your use case
+    config: true,          // show in settings UI
+    default: true,
+    type: Boolean,
+  });
+}
 function setMovementPath(){
   const gameSystemPaths = {
     "a5e": "system.attributes.movement.walk.distance",
@@ -135,3 +147,36 @@ function setMovementPath(){
     type: String
   });
 }
+function setMovementPathsMenu(){
+  game.settings.registerMenu("athenas-movement-trail", "movementPathsMenu", {
+    name: "Movement Paths Configuration", // The name of the button in the settings
+    label: "Open Menu", // The button label in the settings
+    scope: "world",
+    hint: "Click to open the configuration menu.",
+    icon: "fas fa-cog", // FontAwesome icon
+    type: HelloWorldApp, // A FormApplication class (defined below)
+    restricted: true, // Only GMs can access
+  });
+}
+class HelloWorldApp extends FormApplication {
+  static get defaultOptions() {
+    return mergeObject(super.defaultOptions, {
+      id: "hello-world-app",
+      title: "Movement Paths Configuration",
+      template: "modules/athenas-movement-trail/templates/pathConfigSettings.hbs",
+      width: 700
+    });
+  }
+
+  getData() {
+    return {
+      manualPath: "system.attributes.movement.walk", 
+      label: "Walk"
+    };
+  }
+
+  async _updateObject(event, formData) {
+    console.log("Form submitted:", formData);
+  }
+}
+

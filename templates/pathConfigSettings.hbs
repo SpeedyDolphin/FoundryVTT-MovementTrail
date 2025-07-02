@@ -1,0 +1,49 @@
+<form>
+  <table>
+    <tr>
+      <th>
+        <div class="add-button-group">
+          <div class="add-button path-add-button centerChildren">
+            <i class="fas fa-plus"></i>
+          </div>
+
+          <!-- Dropdown Toggle -->
+          <div type="button" class="add-dropdown-toggle centerChildren">
+            <i class="fas fa-caret-down"></i>
+          </div>
+
+          <!-- Dropdown Menu -->
+          <div class="add-dropdown-menu hidden">
+            <button type="button" class="add-option" data-type="manual">Manual</button>
+            <button type="button" class="add-option" data-type="dictionary">Dictionary</button>
+            <button type="button" class="add-option" data-type="array">Array</button>
+          </div>
+        </div>
+      </th>
+      <th style="text-align: left;">Type</th>
+      <th style="text-align: left;">Path</th>
+      <th style="text-align: left;">Label</th>
+      <th>Default</th>  
+    </tr>
+    <tr>
+      <td></td>
+      <td>Manual</td>
+      <td>
+        <input type="text" name="manualPath" value="{{manualPath}}" />
+      </td>
+      <td>
+        <input type="text" name="label" value="{{label}}" />
+      </td>
+      <td>
+        <input type="checkbox" id="something" value="default">
+      </td>
+      <td>
+        <button type="button" class="delete-button" data-id="id" title="Delete">
+          <i class="fas fa-trash"></i>
+          </button>
+      </td>  
+    </tr>  
+  </table>  
+
+  <button type="submit">Save Changes</button>
+</form>

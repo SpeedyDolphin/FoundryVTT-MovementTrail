@@ -1,0 +1,18 @@
+.add-button-group {
+  display: inline-flex;
+  justify-content: space-between;
+}
+.add-button{
+    padding: 3px;
+}
+.add-dropdown-toggle {
+    padding: 3px;
+}
+.centerChildren{
+    display: flex;
+    align-items: center;
+    justify-content: center;;
+}
+.add-dropdownContent{
+    color: (255, 255, 240, 0.8);
+}
