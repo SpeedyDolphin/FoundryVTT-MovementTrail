@@ -14,7 +14,7 @@ export async function renderTokenHUD(app, [html]){
         climb : {label: "Climb", speed: 15, multiplier: 1}, 
     }
     const speed_multipliers = [0.25, 0.5, 1, 2,3,4];
-    const sidePanel =  $( await renderTemplate("modules/athenas-movement-trail/templates/speedMenu.hbs", {speedData, speed_multipliers})).hide();
+    const sidePanel =  $( await renderTemplate("modules/athenas-movement-trail/templates/tokenHUD_menu.hbs", {speedData, speed_multipliers})).hide();
     
   
   // Add click behavior

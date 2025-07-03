@@ -16,3 +16,37 @@
 .add-dropdownContent{
     color: (255, 255, 240, 0.8);
 }
+
+.athena-table{
+    width: 100%;
+    border-top: 1px solid var(--color-border-light-tertiary);
+    background: rgba(0, 0, 0, 0.05);
+    margin: 0.5em 0;
+}
+.athena-table-header{
+    font-weight: bold;
+    display: flex;
+}
+.athena-table-row{
+    background: rgba(255, 255, 255, .3);
+    display: flex;
+}
+.athena-td1{
+    width: 150px;
+    text-align: center;
+}
+.athena-td2{
+    width: 250px;
+}
+.athena-td3{
+    width: 150px;
+}
+.athena-td4{
+    width: 50px;
+}
+.athena-delete-button{
+    width: 33px; 
+    margin-left: 20px;
+    background: none;
+    border: none;
+}

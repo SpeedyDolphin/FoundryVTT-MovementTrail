@@ -1,0 +1,40 @@
+<form>
+  <div class="athena-table">
+    <div class="athena-table-header">
+      <div class="add-button-group" style="padding-left: 0.5em;">
+        <div class="add-button path-add-button centerChildren">
+          <i class="fas fa-plus"></i>
+        </div>
+
+        <!-- Dropdown Toggle -->
+        <div type="button" class="add-dropdown-toggle centerChildren">
+          <i class="fas fa-caret-down"></i>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div class="add-dropdown-menu hidden">
+          <button type="button" class="add-option" data-type="manual">Manual</button>
+          <button type="button" class="add-option" data-type="dictionary">Dictionary</button>
+          <button type="button" class="add-option" data-type="array">Array</button>
+        </div>
+      </div>
+      <div style="width: 120px; padding-left: 0.5em;">
+        <p>Type</p>
+      </div>
+      <div style="width: 240px;">
+        <p>Path</p>
+      </div>
+      <div style="width: 150px;">
+        <p>Label</p>
+      </div>
+      <div style="width: 50px;">
+        <p>Default</p>
+      </div>
+    </div>
+    {{> "modules/athenas-movement-trail/templates/partials/manualEntry.hbs" path=manualPath label=label }}
+    {{!-- {{> "modules/athenas-movement-trail/templates/partials/dictEntry.hbs" path=manualPath label=label }}
+    {{> "modules/athenas-movement-trail/templates/partials/arrayEntry.hbs" path=manualPath label=label }} --}}
+  </div>  
+
+  <button type="submit">Save Changes</button>
+</form>

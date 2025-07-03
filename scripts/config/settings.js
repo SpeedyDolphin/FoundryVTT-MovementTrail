@@ -148,6 +148,7 @@ function setMovementPath(){
   });
 }
 function setMovementPathsMenu(){
+  loadPartials();
   game.settings.registerMenu("athenas-movement-trail", "movementPathsMenu", {
     name: "Movement Paths Configuration", // The name of the button in the settings
     label: "Open Menu", // The button label in the settings
@@ -158,12 +159,21 @@ function setMovementPathsMenu(){
     restricted: true, // Only GMs can access
   });
 }
+function loadPartials(){
+  const paths = [
+    "modules/athenas-movement-trail/templates/partials/arrayEntry.hbs",
+    "modules/athenas-movement-trail/templates/partials/dictEntry.hbs",
+    "modules/athenas-movement-trail/templates/partials/manualEntry.hbs"
+  ]
+  loadTemplates(paths);
+}
+
 class HelloWorldApp extends FormApplication {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       id: "hello-world-app",
       title: "Movement Paths Configuration",
-      template: "modules/athenas-movement-trail/templates/pathConfigSettings.hbs",
+      template: "modules/athenas-movement-trail/templates/settingsMenu.hbs",
       width: 700
     });
   }
