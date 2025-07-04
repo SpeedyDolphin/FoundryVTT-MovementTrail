@@ -1,33 +1,35 @@
-<tr style="background: rgba(255, 255, 255, .15);">
-    <td></td>
-    <td>
-        <div style="display: flex;">
+<div class="athena-table-row">
+    <div class="athena-td1">
+        <div class="centerChildren">
             <p>Dictionary</p>
-            <div type="button" class="add-dropdown-toggle centerChildren">
-                <i class="fas fa-caret-down"></i>
-            </div>
+            &emsp;<i class="fas fa-caret-down"></i>
         </div>
-    </td>
-    <td>
+    </div>
+    <div class="athena-td2">
         <input type="text" name="path" value="{{path}}" />
-    </td>
-    <td></td>
-    <td></td>
-    <td>
-        <button type="button" class="delete-button" data-id="id" title="Delete">
+    </div>
+    
+    <div class="athena-delete-button-position">
+        <button type="button" class="athena-button" tooltip="Delete">
             <i class="fas fa-trash"></i>
         </button>
-    </td>  
-</tr>
-<tr style="background: rgba(255, 255, 255, .3);">
-    <td></td>
-    <td colspan="2" class="centerChildren">
-        <label>Path to value</label>
-    </td>
-    <td colspan="4">
-        <div style="display: flex;">
-            <input type="text" name="path" value="" style="width: 100px;"/>    
-            <i>leave empty if unnested</i>
+    </div>
+</div>
+<div class="athena-collapsible-row">
+    <div class="additional-fields">
+        <div class="athena-td1">
+            &emsp;<p>Path to value</p>
+        </div>
+        <div class="centerChildren">
+            &emsp;<input type="text" name="path" value="" style="width: 100px;"/>    
+            &emsp;<i> Leave empty if unnested</i>
+        </div>
+        <div class="centerChildren" style="margin-left: auto;">
+            <p>Test populate?</p>
+            <button type="button" class="athena-button">
+                <i class="fa-solid fa-rotate"></i>
+            </button>
         </div> 
-    </td>
-</tr>
+    </div>
+    {{> "modules/athenas-movement-trail/templates/partials/testPopulate.hbs" path=manualPath label=label }}
+</div>

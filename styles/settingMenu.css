@@ -1,13 +1,4 @@
-.add-button-group {
-  display: inline-flex;
-  justify-content: space-between;
-}
-.add-button{
-    padding: 3px;
-}
-.add-dropdown-toggle {
-    padding: 3px;
-}
+
 .centerChildren{
     display: flex;
     align-items: center;
@@ -29,24 +20,43 @@
 }
 .athena-table-row{
     background: rgba(255, 255, 255, .3);
+    border-top: 1px solid #7a797152;
     display: flex;
 }
 .athena-td1{
     width: 150px;
-    text-align: center;
+    display: flex;
+    justify-content:center;
+}
+.athena-td2 input{
+    width: 240px;
 }
 .athena-td2{
     width: 250px;
+    align-self: center;
 }
 .athena-td3{
     width: 150px;
+    align-self: center;
 }
 .athena-td4{
     width: 50px;
 }
-.athena-delete-button{
-    width: 33px; 
-    margin-left: 20px;
+.athena-button{
+    width: 33px;
+    height: 30px; 
     background: none;
     border: none;
+}
+.athena-delete-button-position{
+    margin-left: auto;
+    padding-right: 20px;
+}
+.athena-collapsible-row{
+    background: rgba(255, 255, 255, .45);
+    border-top: none;
+    padding-top: 2px; 
+}
+.athena-collapsible-row .additional-fields{
+    display: flex;
 }

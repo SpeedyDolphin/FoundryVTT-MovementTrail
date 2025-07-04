@@ -40,3 +40,4 @@ BUGS:
       Fixed the race condition that properly implementing this caused
 - [X] If combatant has not been registered the ruler movement does not work.   
 - [X] Running into walls cause the last space to cost 0 movement
+- [ ] Fix the border changing with the diffrent grid sizes. Should calculate width off of grid size instead of being constant.

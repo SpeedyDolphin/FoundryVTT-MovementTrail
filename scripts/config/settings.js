@@ -163,7 +163,8 @@ function loadPartials(){
   const paths = [
     "modules/athenas-movement-trail/templates/partials/arrayEntry.hbs",
     "modules/athenas-movement-trail/templates/partials/dictEntry.hbs",
-    "modules/athenas-movement-trail/templates/partials/manualEntry.hbs"
+    "modules/athenas-movement-trail/templates/partials/manualEntry.hbs",
+    "modules/athenas-movement-trail/templates/partials/testPopulate.hbs"
   ]
   loadTemplates(paths);
 }
