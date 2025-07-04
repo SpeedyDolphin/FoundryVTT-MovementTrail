@@ -186,6 +186,19 @@ class HelloWorldApp extends FormApplication {
     };
   }
 
+  activateListeners(html) {
+  super.activateListeners(html);
+
+  html.find(".athena-collapsible-row").on("click", (event) => {
+    event.preventDefault();
+    console.log("Div clicked in FormApplication!");
+
+    // You can use dataset if needed:
+    const action = event.currentTarget.dataset.action;
+    console.log(action);
+  });
+}
+
   async _updateObject(event, formData) {
     console.log("Form submitted:", formData);
   }

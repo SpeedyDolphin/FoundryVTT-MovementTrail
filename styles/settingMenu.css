@@ -52,11 +52,11 @@
     margin-left: auto;
     padding-right: 20px;
 }
-.athena-collapsible-row{
+.athena-collapsible-row-content{
     background: rgba(255, 255, 255, .45);
     border-top: none;
     padding-top: 2px; 
 }
-.athena-collapsible-row .additional-fields{
+.athena-collapsible-row-content .additional-fields{
     display: flex;
 }
