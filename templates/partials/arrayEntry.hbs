@@ -1,36 +1,38 @@
-<div class="athena-table-row athena-collapsible-row" style="cursor: pointer;">
-    <div class="athena-td1">
-        <div class="centerChildren">
-            <p>Array</p>
-            &emsp;<i class="fas fa-caret-down"></i>
-        </div>
-    </div>
-    <div class="athena-td2">
-        <input type="text" name="path" value="{{path}}" />
-    </div>
-    
-    <div class="athena-delete-button-position">
-        <button type="button" class="athena-button" tooltip="Delete">
-            <i class="fas fa-trash"></i>
-        </button>
-    </div>
-</div>
-<div class="athena-collapsible-row-content">
-    <div class="additional-fields">
+<div class="athena-entry">
+    <div class="athena-table-row athena-collapsible-row" style="cursor: pointer;">
         <div class="athena-td1">
-            &emsp;<p>Path to value</p>
+            <div class="centerChildren">
+                <p>Array</p>
+                &emsp;<i class="fas fa-caret-down"></i>
+            </div>
         </div>
-        <div class="centerChildren">
-            &emsp;<input type="text" name="path" value="" style="width: 100px;"/>
-            &emsp;<p>Path to label</p>
-            &emsp;<input type="text" name="path" value="" style="width: 100px;"/>    
+        <div class="athena-td2">
+            <input type="text" name="path" value="{{path}}" />
         </div>
-        <div class="centerChildren" style="margin-left: auto;">
-            <p>Test populate?</p>
-            <button type="button" class="athena-button">
-                <i class="fa-solid fa-rotate"></i>
+        
+        <div class="athena-delete-button-position">
+            <button type="button" class="athena-button athena-delete-row" data-tooltip="Delete">
+                <i class="fas fa-trash"></i>
             </button>
-        </div> 
+        </div>
     </div>
-    {{> "modules/athenas-movement-trail/templates/partials/testPopulate.hbs" path=manualPath label=label }}
+    <div class="athena-collapsible-row-content hidden">
+        <div class="additional-fields">
+            <div class="athena-td1">
+                &emsp;<p>Path to value</p>
+            </div>
+            <div class="centerChildren">
+                &emsp;<input type="text" name="path" value="" style="width: 100px;"/>
+                &emsp;<p>Path to label</p>
+                &emsp;<input type="text" name="path" value="" style="width: 100px;"/>    
+            </div>
+            <div class="centerChildren" style="margin-left: auto;">
+                <p>Test populate?</p>
+                <button type="button" class="athena-button">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
+            </div> 
+        </div>
+        {{> "modules/athenas-movement-trail/templates/partials/testPopulate.hbs" path=manualPath label=label }}
+    </div>
 </div>

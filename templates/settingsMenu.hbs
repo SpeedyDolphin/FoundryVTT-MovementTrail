@@ -1,19 +1,23 @@
-<form>
+<form class="athena-settings-form">
+  <div>
+    <p>
+      Hey here's a quick guide that I hope I won't forget to actually write later.
+    </p>
+  </div>
+  <!-- Dropdown Menu -->
+  <div class="athena-dropdown-add-menu athena-hidden-with-space">
+    <p class="add-option" data="manual">Manual</p>
+    <p class="add-option" data="dictionary">Dictionary</p>
+    <p class="add-option" data="array">Array</p>
+  </div>
   <div class="athena-table">
     <div class="athena-table-header">
       <div class="add-button-group" style="padding-left: 0.5em;">
 
-        <button type="button" class="athena-button centerChildren">
+        <button type="button" class="athena-button centerChildren athena-add-entry">
           <i class="fas fa-plus"></i>
           <i class="fas fa-caret-down"></i>
         </button>
-
-        <!-- Dropdown Menu -->
-        <div class="add-dropdown-menu hidden">
-          <button type="button" class="add-option" data-type="manual">Manual</button>
-          <button type="button" class="add-option" data-type="dictionary">Dictionary</button>
-          <button type="button" class="add-option" data-type="array">Array</button>
-        </div>
       </div>
       <div style="width: 120px; padding-left: 0.5em;">
         <p>Type</p>
@@ -33,5 +37,5 @@
     {{> "modules/athenas-movement-trail/templates/partials/arrayEntry.hbs" path=manualPath label=label }} 
   </div>  
 
-  <button type="submit">Save Changes</button>
+  <button type="submit" class="athena-submit-button">Save Changes</button>
 </form>

@@ -20,7 +20,8 @@
 - [ ] Update collision checking to use Foundry's method. 
 - [ ] Add way to swap movement type per token
    - [ ] Make the HUD button save information in token flags
-   - [ ] Make the settings menu for configuring the different speed options functional 
+   - [ ] Make the settings menu for configuring the different speed options functional
+      - [ ] Add an error message and prevent deletion of the default path 
 
 Would be nice 
 - [X] Update module to use sockets instead of each person tracking the state. 

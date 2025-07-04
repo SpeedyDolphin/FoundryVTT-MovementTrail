@@ -189,13 +189,26 @@ class HelloWorldApp extends FormApplication {
   activateListeners(html) {
   super.activateListeners(html);
 
+  // Handle the click event for the collapsible rows
   html.find(".athena-collapsible-row").on("click", (event) => {
     event.preventDefault();
-    console.log("Div clicked in FormApplication!");
-
-    // You can use dataset if needed:
-    const action = event.currentTarget.dataset.action;
-    console.log(action);
+    const $header = $(event.currentTarget);
+    const $content = $header.next(".athena-collapsible-row-content");
+    $content.toggle();
+  });
+  // Handle the click event for deleting rows
+  html.find(".athena-delete-row").on("click", (event) => {
+    event.stopPropagation();
+    console.log("YOU PUSHED MY BUTTON!");
+    $(event.currentTarget).closest(".athena-entry").remove();
+  });
+  // Handle the click event for adding a new entry
+  html.find(".athena-add-entry").on("click", (event) => {
+    event.stopPropagation();
+    console.log("YOU PUSHED MY BUTTON!");
+    const $header = $(event.currentTarget);
+    const $content = $header.next(".athena-dropdown-add-menu");
+    $content.toggleClass("athena-hidden-with-space");
   });
 }
 

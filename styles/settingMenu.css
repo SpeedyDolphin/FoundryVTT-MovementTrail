@@ -4,15 +4,13 @@
     align-items: center;
     justify-content: center;;
 }
-.add-dropdownContent{
-    color: (255, 255, 240, 0.8);
-}
 
 .athena-table{
     width: 100%;
     border-top: 1px solid var(--color-border-light-tertiary);
     background: rgba(0, 0, 0, 0.05);
-    margin: 0.5em 0;
+    margin: 0.5em;
+    margin-top: 0;
 }
 .athena-table-header{
     font-weight: bold;
@@ -59,4 +57,25 @@
 }
 .athena-collapsible-row-content .additional-fields{
     display: flex;
+}
+.athena-settings-form{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.athena-submit-button{
+    margin-top: auto;
+}
+.athena-dropdown-add-menu{
+    display: flex;
+    width: min-content;
+    margin-left: 0.5em;
+    background-color: rgba(255, 255, 255, .3);
+}
+.athena-dropdown-add-menu > * {
+    padding-left: 5px;
+    padding-right:5px;
+}
+.athena-hidden-with-space{
+    /* visibility: hidden; */
 }
