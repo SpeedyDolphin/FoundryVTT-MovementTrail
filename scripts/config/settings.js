@@ -1,4 +1,4 @@
-
+import {PathConfigSettings} from "./pathConfigSettings.js";
 
 export function registerSettings(){
     // DM settings
@@ -155,7 +155,7 @@ function setMovementPathsMenu(){
     scope: "world",
     hint: "Click to open the configuration menu.",
     icon: "fas fa-cog", // FontAwesome icon
-    type: HelloWorldApp, // A FormApplication class (defined below)
+    type: PathConfigSettings, // A FormApplication class (defined below)
     restricted: true, // Only GMs can access
   });
 }
@@ -167,53 +167,5 @@ function loadPartials(){
     "modules/athenas-movement-trail/templates/partials/testPopulate.hbs"
   ]
   loadTemplates(paths);
-}
-
-class HelloWorldApp extends FormApplication {
-  static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      id: "hello-world-app",
-      title: "Movement Paths Configuration",
-      template: "modules/athenas-movement-trail/templates/settingsMenu.hbs",
-      width: 700
-    });
-  }
-
-  getData() {
-    return {
-      manualPath: "system.attributes.movement.walk", 
-      label: "Walk"
-    };
-  }
-
-  activateListeners(html) {
-  super.activateListeners(html);
-
-  // Handle the click event for the collapsible rows
-  html.find(".athena-collapsible-row").on("click", (event) => {
-    event.preventDefault();
-    const $header = $(event.currentTarget);
-    const $content = $header.next(".athena-collapsible-row-content");
-    $content.toggle();
-  });
-  // Handle the click event for deleting rows
-  html.find(".athena-delete-row").on("click", (event) => {
-    event.stopPropagation();
-    console.log("YOU PUSHED MY BUTTON!");
-    $(event.currentTarget).closest(".athena-entry").remove();
-  });
-  // Handle the click event for adding a new entry
-  html.find(".athena-add-entry").on("click", (event) => {
-    event.stopPropagation();
-    console.log("YOU PUSHED MY BUTTON!");
-    const $header = $(event.currentTarget);
-    const $content = $header.next(".athena-dropdown-add-menu");
-    $content.toggleClass("athena-hidden-with-space");
-  });
-}
-
-  async _updateObject(event, formData) {
-    console.log("Form submitted:", formData);
-  }
 }
 
