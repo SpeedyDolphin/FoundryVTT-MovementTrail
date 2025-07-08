@@ -1,4 +1,4 @@
-import {PathConfigSettings, getDefaultPaths} from "./pathConfigSettings.js";
+import {PathConfigSettings, getDefaultPaths} from "./pathconfigSettings.js";
 
 export function registerSettings(){
     // DM settings
