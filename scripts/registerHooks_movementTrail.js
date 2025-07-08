@@ -5,7 +5,7 @@ import {renderCombatantTrail} from "./render.js"
 import { registerSettings } from "./config/settings.js";
 import { setKeybindings } from "./config/keybinds.js";
 import { renderInit } from "./render.js";
-import { renderTokenHUD } from "./tokenHud.js";
+import { renderTokenHUD } from "./tokenHUD.js";
 
 
 Hooks.once('init', async function() {
