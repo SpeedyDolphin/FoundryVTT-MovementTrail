@@ -4,16 +4,15 @@
 /*
 Specific uses: 
   { registerSettings } by registerHooks_movementTrail.js
-    - Every function in this file is called by registerSettings() 
+    - Nearly every function in this file is called by registerSettings() 
 */
 import {PathConfigSettings, getDefaultPaths} from "./pathConfigSettings.js";
 
 export function registerSettings(){
     // DM settings
-    setMovementPath();
     setMovementPathsMenu();
-    addTokenHUDButton();
     minOwnership();
+    addTokenHUDButton();
 
     // Client Settings
     fontSettings();
@@ -70,6 +69,7 @@ function colorScheme(){
       "embers": "Embers (Orange, Pink, Orchid, Plum)",
       "custom": "Custom",
     },
+
   });
   
   new window.Ardittristan.ColorSetting("athenas-movement-trail", "customColor1", {
@@ -112,6 +112,26 @@ function colorScheme(){
     onChange: (value) => {},            // A callback function which triggers when the setting is changed
     insertAfter: "athenas-movement-trail.customColor3"   // If supplied it will place the setting after the supplied setting
   })
+}
+export function setUpColorSchemeListener(html){
+  // Line for v13 compatibility. Thanks to Michael in the Foundry Discord for this
+  html = html instanceof HTMLElement ? html : html[0];
+
+  const mySettings = html.querySelector('section[data-tab="athenas-movement-trail"]');
+  const colorThemeSelect = mySettings.querySelector('div[data-settings-key="athenas-movement-trail.movementUsageColorScheme"]').querySelector('select');
+  
+  function updateVisibility(){
+    const colorTheme = colorThemeSelect.value
+    for(let i=1; i<=4; i++){
+      if(colorTheme === 'custom')
+        mySettings.querySelector(`div[data-settings-key="athenas-movement-trail.customColor${i}"]`).style.display = "";
+      else
+        mySettings.querySelector(`div[data-settings-key="athenas-movement-trail.customColor${i}"]`).style.display = "none";
+    }
+  }
+  updateVisibility()
+  colorThemeSelect.addEventListener("change", updateVisibility);
+
 } 
 function minOwnership(){
     game.settings.register("athenas-movement-trail", "ownershipLevel", {
@@ -137,22 +157,6 @@ function addTokenHUDButton(){
     config: true,          // show in settings UI
     default: true,
     type: Boolean,
-  });
-}
-function setMovementPath(){
-  const gameSystemPaths = {
-    "a5e": "system.attributes.movement.walk.distance",
-    "dnd5e": "system.attributes.movement.walk",
-    "pf2e": "system.attributes.speed.total",
-  }
-
-  game.settings.register("athenas-movement-trail", "actorMovementSpeedPath", {
-    name: "Actor Movement Speed Path",
-    hint: "The path to the actor's movement speed attribute.",
-    scope: "world",       // or "world" depending on your use case
-    config: true,          // show in settings UI
-    default: gameSystemPaths[game.system.id] || "system.attributes.movement.walk",
-    type: String
   });
 }
 function setMovementPathsMenu(){

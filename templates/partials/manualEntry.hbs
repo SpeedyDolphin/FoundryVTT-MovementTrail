@@ -4,13 +4,13 @@
             <p>Manual</p>
         </div>
         <div class="athena-td2">
-            <input type="text" class="path-field" name="manualPath" value="{{manualPath}}"/>
+            <input type="text" class="path-field" name="manualPath" value="{{path}}"/>
         </div>
         <div class="athena-td3">
             <input type="text" name="manualLabel" value="{{label}}" style="width: 100px;" />
         </div>
         <div class="centerChildren athena-td4">
-            <input type="checkbox" name="isDefaultPath">
+            <input type="checkbox" name="isDefaultPath" {{#if isDefault}}checked{{/if}}>
         </div>
         
         <div class="athena-delete-button-position">

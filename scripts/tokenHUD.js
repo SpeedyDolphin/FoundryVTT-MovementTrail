@@ -9,7 +9,6 @@ Specific uses:
 export async function renderTokenHUD(app, [html]){
     // Line for v13 compatibility. Thanks to Michael in the Foundry Discord for this
     html = html instanceof HTMLElement ? html : html[0];
-    console.log(html);
     // Create a new button
     const btn = $(`<div class="athena-hud-button control-icon" data-tooltip="Movement Type">
       <img class="athena-hud-icon" src="modules/athenas-movement-trail/images/wingfoot.svg"/>

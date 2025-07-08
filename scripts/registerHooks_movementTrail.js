@@ -2,7 +2,7 @@
 
 import { registerCombatant, updateTrail,resetUntracked, saveData, loadData, clearData, rulerUpdateTrail, addToUntracked} from "./tokenTrail.js";
 import {renderCombatantTrail} from "./render.js"
-import { registerSettings } from "./config/settings.js";
+import { registerSettings, setUpColorSchemeListener } from "./config/settings.js";
 import { setKeybindings } from "./config/keybinds.js";
 import { renderInit } from "./render.js";
 import { renderTokenHUD } from "./tokenHUD.js";
@@ -78,5 +78,8 @@ Hooks.on("renderTokenHUD", (hud, html, data) => {
   if(game.settings.get("athenas-movement-trail", "addTokenHUDButton")){
     renderTokenHUD(hud, html, data);
   }
+});
+Hooks.on("renderSettingsConfig", (app, html, data) => {
+  setUpColorSchemeListener(html);
 });
 

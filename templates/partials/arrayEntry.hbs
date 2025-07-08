@@ -24,9 +24,9 @@
                 &emsp;<p>Path to value</p>
             </div>
             <div class="centerChildren">
-                &emsp;<input type="text" name="arrayValuePath" value="" style="width: 100px;"/>
+                &emsp;<input type="text" name="arrayValuePath" value="{{valuePath}}" style="width: 100px;"/>
                 &emsp;<p>Path to label</p>
-                &emsp;<input type="text" name="arrayLabelPath" value="" style="width: 100px;"/>    
+                &emsp;<input type="text" name="arrayLabelPath" value="{{labelPath}}" style="width: 100px;"/>    
             </div>
             <div class="centerChildren" style="margin-left: auto;">
                 <p>Test populate?</p>
@@ -35,6 +35,5 @@
                 </button>
             </div> 
         </div>
-        {{> "modules/athenas-movement-trail/templates/partials/testPopulate.hbs" path=manualPath label=label }}
     </div>
 </div>

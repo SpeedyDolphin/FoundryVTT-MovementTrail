@@ -20,13 +20,14 @@
 - [ ] Update collision checking to use Foundry's method. 
 - [ ] Add way to swap movement type per token
    - [ ] Make the HUD button save information in token flags
-   - [ ] Make the settings menu for configuring the different speed options functional
+   - [X] Make the settings menu for configuring the different speed options functional
       - [ ] Add an error message and prevent deletion of the default path 
+      - [ ] Write a guide for how to use the settings
 
 Would be nice 
 - [X] Update module to use sockets instead of each person tracking the state. 
 - [ ] Does not account for large creatures. Will only take the middle of the top left square into account. 
-- [ ] Find a way to hide fields in foundry setting page. 
+- [X] Find a way to hide fields in foundry setting page. Edit: was a mild pain
 
 
 

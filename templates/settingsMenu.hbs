@@ -41,9 +41,19 @@
         <p>Default</p>
       </div>
     </div>
-    {{> "modules/athenas-movement-trail/templates/partials/manualEntry.hbs" path=manualPath label=label }}
-    {{> "modules/athenas-movement-trail/templates/partials/dictEntry.hbs" path=manualPath label=label }}
-    {{> "modules/athenas-movement-trail/templates/partials/arrayEntry.hbs" path=manualPath label=label }} 
+    {{> "modules/athenas-movement-trail/templates/partials/manualEntry.hbs" path=default.path label=default.label isDefault=true}}
+    
+    {{#each movementSpeeds}}
+      {{#if (eq this.type "manual")}}
+        {{> "modules/athenas-movement-trail/templates/partials/manualEntry.hbs" path=this.path label=this.label isDefault=false}}
+      {{/if}}
+      {{#if (eq this.type "dictionary")}}
+        {{> "modules/athenas-movement-trail/templates/partials/dictEntry.hbs" path=this.path valuePath=this.value}}
+      {{/if}}
+      {{#if (eq this.type "array")}}
+        {{> "modules/athenas-movement-trail/templates/partials/arrayEntry.hbs" path=this.path valuePath=this.value labelPath=this.label}}
+      {{/if}}
+    {{/each}} 
   </div>  
 
   <button type="submit" class="athena-submit-button">Save Changes</button>

@@ -69,10 +69,7 @@ export class PathConfigSettings extends FormApplication {
   }
 
   getData() {
-    return {
-      manualPath: "system.attributes.movement.walk", 
-      label: "Walk"
-    };
+    return game.settings.get("athenas-movement-trail", "movementPaths");
   }
 
   activateListeners(html) {
