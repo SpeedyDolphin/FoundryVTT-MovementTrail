@@ -1,4 +1,4 @@
-import {PathConfigSettings} from "./pathConfigSettings.js";
+import {PathConfigSettings, getDefaultPaths} from "./pathConfigSettings.js";
 
 export function registerSettings(){
     // DM settings
@@ -149,6 +149,14 @@ function setMovementPath(){
 }
 function setMovementPathsMenu(){
   loadPartials();
+  game.settings.register("athenas-movement-trail", "movementPaths", {
+    name: "Actor Movement Speed Paths",
+    hint: "The paths to the actor's movement speed attribute.",
+    scope: "world",       // or "world" depending on your use case
+    config: false,          // show in settings UI
+    default: getDefaultPaths(),
+    type: Object
+  });
   game.settings.registerMenu("athenas-movement-trail", "movementPathsMenu", {
     name: "Movement Paths Configuration", // The name of the button in the settings
     label: "Open Menu", // The button label in the settings

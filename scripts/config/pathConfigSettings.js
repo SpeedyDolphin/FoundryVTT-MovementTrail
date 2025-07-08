@@ -107,6 +107,91 @@ export class PathConfigSettings extends FormApplication {
   }
   async _updateObject(event, formData) {
     console.log("Form submitted:", formData);
+    
+    let pathData = {"movementSpeeds":[]}
+    
+    //Process the manual rows
+    //Multiple manual rows
+    if(typeof(formData.manualPath)!=='string'){
+      for(let i =0; i< formData.manualPath.length; i++){
+        let formattedData = processManualRow(formData.manualPath[i], formData.manualLabel[i], formData.isDefaultPath[i]);
+        if (formattedData["type"]===undefined){
+          pathData["default"] = formattedData["default"];
+        }
+        else{
+          pathData.movementSpeeds.push(formattedData)
+        }
+      }
+    }
+    else{//Only one manual row. Per rules this must be a default path
+      pathData['default'] = {
+        "path": formData.manualPath,
+        "label": formData.manualLabel
+      }
+    }
+    //Process Dictionary Rows
+    if(formData.dictionaryPath !== undefined){
+      if( typeof(formData.dictionaryPath)!=='string'){
+        for(let i =0; i< formData.dictionaryPath.length; i++){
+          pathData.movementSpeeds.push(processDictionaryRow(formData.dictionaryPath[i], formData.dictionaryValuePath[i]));
+        }
+      }
+      else {
+        pathData.movementSpeeds.push(processDictionaryRow(formData.dictionaryPath, formData.dictionaryValuePath));
+      }
+    }
+    //Process Array Rows
+    if(formData.arrayPath !== undefined){
+      if( typeof(formData.arrayPath)!=='string'){
+        for(let i =0; i< formData.arrayPath.length; i++){
+          pathData.movementSpeeds.push(processArrayRow(formData.arrayPath[i], formData.arrayPath[i], formData.arrayValuePath[i]));
+        }
+      }
+      else {
+        pathData.movementSpeeds.push(processArrayRow(formData.arrayPath, formData.arrayValuePath, formData.arrayValuePath));
+      }
+    }
+    console.log(pathData);
+    await game.settings.set('athenas-movement-trail','movementPaths', pathData);
+
   }
 }
 
+function processManualRow(path, label, isDefault){
+  if (isDefault){
+    return {
+      "default": {
+        "path": path,
+        "label": label
+      }
+    }
+  }
+  else{
+    return {
+      "type": "manual",
+      "path": path,
+      "label": label
+    }
+  }
+}
+function processDictionaryRow(path, value){
+  return{
+    "type":"dictionary",
+    "path":path,
+    "value":value
+  }
+}
+function processArrayRow(path, value, label){
+  return{
+    "type": "array",
+    "path":path,
+    "value":value,
+    "label":label
+  } 
+}
+export function getDefaultPaths(){
+  if(game.system.id in DEFAULT_PATHS){
+    return DEFAULT_PATHS[game.system.id]
+  }
+  return DEFAULT_PATHS['dnd5e']
+}
