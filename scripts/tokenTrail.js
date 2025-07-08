@@ -1,4 +1,16 @@
 
+// Exports used by registerHooks_movementTrail.js, keybinds.js
+//This contains the module's main logic. It tracks the combatants, updates them and sends the command to render the trail.
+
+/*
+Specific uses: 
+    {showTrail, togglePathCondensing, toggleMovementTracking} by keybinds.js 
+        Everything that reacts to a key stroke on the client's computer  
+
+    { registerCombatant, updateTrail, resetUntracked, saveData, loadData, clearData, rulerUpdateTrail, addToUntracked} by registerHooks_movementTrail.js
+        Everything that reacts based to a hook event. 
+*/
+
 import { renderCombatantTrail} from "./render.js";
 import { socket } from "./registerHooks_movementTrail.js";
 

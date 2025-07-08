@@ -1,3 +1,10 @@
+//Exports used by registerHooks.js
+// The purpose of this file is to let all game.keybindings.register calls live in one file
+/*
+  Specific uses: 
+    { setKeybindings } by registerHooks.js
+     - Every function in this file is called by setKeybindings()
+*/
 import {showTrail, togglePathCondensing, toggleMovementTracking} from "../tokenTrail.js";
 
 export function setKeybindings(){

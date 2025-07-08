@@ -1,3 +1,10 @@
+//Purpose: Add the button to the token HUD and handle all logic that lets the user manipulate their speed
+/*
+Specific uses: 
+	{ renderTokenHUD } by registerHooks_movementTrail.js
+	 	Adds an extra button to the token HUD allows players more control over their movement speed
+*/
+
 
 export async function renderTokenHUD(app, [html]){
     // Line for v13 compatibility. Thanks to Michael in the Foundry Discord for this

@@ -1,3 +1,14 @@
+//export is used by tokenTrail.js
+// The purpose of this file is to render the token trail on the map. 
+
+/*
+Specific uses: 
+    {renderCombatantTrail} by tokenTrail.js
+        handles the logic for actually rendering the token trail (given the name duh)
+    
+    { renderInit } by registerHooks_movementTrail.js
+        initializes and sets up the containers 
+*/
 let mainContainer
 let subContainers
 

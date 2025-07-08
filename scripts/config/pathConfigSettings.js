@@ -1,3 +1,20 @@
+//Export used by settings.js
+//This file contains the logic for displaying the popup menu for configuring the the path to the value of the token's movement speed
+
+/*
+Specific uses: 
+  {PathConfigSettings, getDefaultPaths} by settings.js
+    PathConfigSettings is a class extending FormApplication
+    getDefaultsPaths() is a getter to allow the settings files to register the proper path given the game system. 
+
+
+Depends upon: 
+settingsMenu.hbs    ~ the parent form file 
+ - partials/manualEntry.hbs
+ - partials/dictEntry.hbs
+ - partials/arrayEntry.hbs
+*/
+
 const DEFAULT_PATHS = {
   "a5e": {
     "default": {

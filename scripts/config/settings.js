@@ -1,4 +1,12 @@
-import {PathConfigSettings, getDefaultPaths} from "./pathconfigSettings.js";
+// Exports used by registerHooks_movementTrail.js
+// The purpose of this file is to let all game.settings.register calls live in one file. 
+
+/*
+Specific uses: 
+  { registerSettings } by registerHooks_movementTrail.js
+    - Every function in this file is called by registerSettings() 
+*/
+import {PathConfigSettings, getDefaultPaths} from "./pathConfigSettings.js";
 
 export function registerSettings(){
     // DM settings

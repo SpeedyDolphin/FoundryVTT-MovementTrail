@@ -1,3 +1,5 @@
+// This is the place where is all starts and then things get delegated to other files. 
+
 import { registerCombatant, updateTrail,resetUntracked, saveData, loadData, clearData, rulerUpdateTrail, addToUntracked} from "./tokenTrail.js";
 import {renderCombatantTrail} from "./render.js"
 import { registerSettings } from "./config/settings.js";
@@ -14,7 +16,7 @@ Hooks.once('init', async function() {
   monkeyPatchRuler();
 });
 
-export let socket;
+export let socket; //export is used by tokenTrail to communicate changes to other players
 Hooks.once("socketlib.ready", () => {
   socket = socketlib.registerModule("athenas-movement-trail");
   socket.register("render", renderCombatantTrail);
