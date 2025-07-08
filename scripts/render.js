@@ -182,6 +182,6 @@ function meetsOwnershipThreshold(tokenId){
 }
 function getSpeed(tokenId){
     const actor = canvas.tokens.get(tokenId).actor;
-    const path = game.settings.get("athenas-movement-trail", "actorMovementSpeedPath");
+    const path = game.settings.get("athenas-movement-trail", "movementPaths").default.path;
     return path.split('.').reduce((acc, key) => acc[key], actor) || 0;
 }
