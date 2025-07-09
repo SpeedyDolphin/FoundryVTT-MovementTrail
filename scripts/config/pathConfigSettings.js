@@ -50,7 +50,7 @@ const DEFAULT_PATHS = {
     "movementSpeeds": [
       {
         "type" : "array",
-        "path" : "system.attributes.movement.otherSpeeds",
+        "path" : "system.attributes.speed.otherSpeeds",
         "value": ".value",
         "label": ".label"
       }

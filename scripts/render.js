@@ -9,6 +9,7 @@ Specific uses:
     { renderInit } by registerHooks_movementTrail.js
         initializes and sets up the containers 
 */
+import { getTokenSpeeds } from "./helpers/movementSpeeds.js";
 let mainContainer
 let subContainers
 
@@ -79,7 +80,7 @@ export async function renderCombatantTrail(combatantId, trail, userId){
 
 function drawTrail(trail, container, color, tokenId){
     let cost = 0
-    for (let i = 0; i < trail.length; i++){
+    for (let i = 0; i < trail.length-1; i++){
         cost = Math.round(cost + trail[i].cost ?? 0); // rounding to avoid floating point issues
         drawSquare(trail[i].pixel.x, trail[i].pixel.y, color, String(cost), container, (trail[i].cost === 0 && i !== 0))
         movementUsageIndicator(trail[i].pixel.x, trail[i].pixel.y, cost, container, tokenId); 
