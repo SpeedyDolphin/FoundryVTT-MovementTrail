@@ -9,7 +9,7 @@ Specific uses:
     { renderInit } by registerHooks_movementTrail.js
         initializes and sets up the containers 
 */
-import { getTokenSpeeds } from "./helpers/movementSpeeds.js";
+import { getTokenSpeed} from "./helpers/movementSpeeds.js";
 let mainContainer
 let subContainers
 
@@ -102,7 +102,8 @@ function movementUsageIndicator(x, y, currentCost, container, tokenId){
 }
 function drawBasicMovementUsageIndicator(x, y,currentCost, container, tokenId){
     const gridSize = canvas.grid.size;
-    const userMovement = getSpeed(tokenId); //TODO get the actual movement of the actor 
+    //const userMovement = getSpeed(tokenId); //TODO get the actual movement of the actor 
+    const userMovement = getTokenSpeed(tokenId)
     const colorPalette = getColorPalette()
 
     //Draw Square
@@ -180,9 +181,4 @@ function meetsOwnershipThreshold(tokenId){
     }
     return false; 
 
-}
-function getSpeed(tokenId){
-    const actor = canvas.tokens.get(tokenId).actor;
-    const path = game.settings.get("athenas-movement-trail", "movementPaths").default.path;
-    return path.split('.').reduce((acc, key) => acc[key], actor) || 0;
 }

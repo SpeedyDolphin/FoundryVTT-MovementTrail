@@ -74,9 +74,9 @@ function monkeyPatchRuler(){
   );
 }
 
-Hooks.on("renderTokenHUD", (hud, html, data) => {
+Hooks.on("renderTokenHUD", (app, [html]) => {
   if(game.settings.get("athenas-movement-trail", "addTokenHUDButton")){
-    renderTokenHUD(hud, html, data);
+    renderTokenHUD(app, [html]);
   }
 });
 Hooks.on("renderSettingsConfig", (app, html, data) => {
