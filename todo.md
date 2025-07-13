@@ -24,7 +24,7 @@
       - [ ] Add an error message and prevent deletion of the default path 
       - [ ] Write a guide for how to use the settings
       - [ ] Implement the functionality for the test populate button
-      - [ ] Change it so it selects the highest move speed. If there is a tie involving the default speed. Choose the default speed
+      - [X] Change it so it selects the highest move speed. If there is a tie involving the default speed. Choose the default speed
 - [ ] Add a way to decide if the half speed of climbing and swimming is shown on hud.  
 
 Would be nice 

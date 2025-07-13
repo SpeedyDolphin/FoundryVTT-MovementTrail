@@ -64,19 +64,18 @@ function parsePath(path, startPoint){
     return path.split('.').filter(Boolean).reduce((acc, key) => acc[key], startPoint) || 0;
 }
 
-export async function getActorFlags(tokenId){
+export async function getTokenFlags(tokenId){
     console.log('getActorFlags called');
-    let actor = canvas.tokens.get(tokenId).actor
-    console.log(actor)
-    let data = actor.getFlag("athenas-movement-trail", "actorSpeeds")
+    let token = canvas.tokens.get(tokenId).document
+    let data = token.getFlag("athenas-movement-trail", "actorSpeeds")
 
-     if (data === undefined)
+    if (data === undefined)
         data = defaultActorFlag(tokenId)
     else
         data["speedData"] = updateSpeedList(tokenId, data["speedData"])
   
     console.log("Pre setFlag");
-    //actor.setFlag("athenas-movement-trail", "actorSpeeds", data);
+    token.setFlag("athenas-movement-trail", "actorSpeeds", data);
     console.log("Post setFlag")
     return data
 }
@@ -86,7 +85,7 @@ function defaultActorFlag(tokenId){
   let speeds = getTokenSpeeds(tokenId)
 
   let flags = {
-    currentMovement : Object.entries(speeds).reduce((max, [key, value]) => {return value > speeds[max] ? key : max;}, Object.keys(speeds)[0]), //hightest available speed 
+    currentMovement : defaultMovement(speeds),
     initPenalty : 0,
     globalBonus: 0, 
     speedData : {}
@@ -95,6 +94,31 @@ function defaultActorFlag(tokenId){
     flags.speedData[speed] = {multiplier: 1, speed: speeds[speed]}
   }
   return flags
+}
+// Speeds is a dictionary such as {"walk":30, "swim":15}
+function defaultMovement(speeds){
+    console.log("I EXIST")
+    console.log(speeds)
+    let topSpeeds = []
+    let topSpeed = 0
+    for(let speed in speeds){
+        if(speeds[speed] > topSpeed){
+            topSpeeds = [speed]
+            topSpeed = speeds[speed]
+        }
+        else if(speeds[speed] === topSpeed){
+            topSpeeds.push(speed)
+        }
+    }
+    let defaultLabel = game.settings.get("athenas-movement-trail", "movementPaths").default.label;
+    console.log(topSpeeds)
+    console.log(defaultLabel)
+    if (topSpeeds.includes(defaultLabel)){
+        console.log("returning default label")
+        return defaultLabel
+    }
+    else
+        return topSpeeds[0]
 }
 
 function updateSpeedList(tokenId, speedData){

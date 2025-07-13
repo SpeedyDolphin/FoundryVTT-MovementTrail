@@ -1,10 +1,14 @@
 //Purpose: Add the button to the token HUD and handle all logic that lets the user manipulate their speed
 
-import { getActorFlags } from "./helpers/movementSpeeds.js";
+import { getTokenFlags } from "./helpers/movementSpeeds.js";
 /*
 Specific uses: 
 	{ renderTokenHUD } by registerHooks_movementTrail.js
 	 	Adds an extra button to the token HUD allows players more control over their movement speed
+
+Depends upon: 
+  tokenHUD_menu.hbs
+
 */
 const sampleActorFlags = {
   speedData : { // This will get updated every time the side panel in the HUD is opened. Only values with a speed > 0 are stored. 
@@ -25,12 +29,14 @@ export async function renderTokenHUD(app, [html]){
       <img class="athena-hud-icon" src="modules/athenas-movement-trail/images/wingfoot.svg"/>
     </div>`);
   
-    const flags = await getActorFlags(app.document._id)
+    const flags = await getTokenFlags(app.document._id)
     console.log(flags)
     const speed_multipliers = [0.25, 0.5, 1, 2,3,4];
-    const sidePanel =  $( await renderTemplate("modules/athenas-movement-trail/templates/tokenHUD_menu.hbs", {speedData: cleanSpeedData(flags.speedData), speed_multipliers})).hide();
+    const sidePanel =  $( await renderTemplate("modules/athenas-movement-trail/templates/tokenHUD_menu.hbs", {speedData: cleanSpeedData(flags.speedData), speed_multipliers, currentMovement:flags.currentMovement})).hide();
     
   
+    console.log(cleanSpeedData(flags.speedData))
+    console.log(flags);
   // Add click behavior
   btn.on("click", () => {
     btn.toggleClass("active");
@@ -46,6 +52,7 @@ function cleanSpeedData(speedData){
   const includeSwimClimb = true
   for(let entry in speedData){
     speedData[entry]["label"] = toTitleCase(entry)
+    speedData[entry]["type"] = entry
     if ((entry === "climb" || entry === "swim") && includeSwimClimb ){
       if (speedData[entry].speed <= 0)
         speedData[entry].speed = Math.floor(speedData['walk'].speed /2);
@@ -62,4 +69,7 @@ function toTitleCase(str) {
     .split(" ")
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ").trim();
+}
+function activateListener(){
+  const el = document.querySelector(".speed-item");
 }
