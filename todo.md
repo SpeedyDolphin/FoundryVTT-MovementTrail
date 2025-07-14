@@ -25,7 +25,7 @@
       - [ ] Write a guide for how to use the settings
       - [ ] Implement the functionality for the test populate button
       - [X] Change it so it selects the highest move speed. If there is a tie involving the default speed. Choose the default speed
-- [ ] Add a way to decide if the half speed of climbing and swimming is shown on hud.  
+- [X] Add a way to decide if the half speed of climbing and swimming is shown on hud.  
 
 Would be nice 
 - [X] Update module to use sockets instead of each person tracking the state. 

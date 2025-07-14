@@ -13,6 +13,7 @@ export function registerSettings(){
     setMovementPathsMenu();
     minOwnership();
     addTokenHUDButton();
+    showSwimClimbAsHalfSpeed();
 
     // Client Settings
     fontSettings();
@@ -153,6 +154,16 @@ function addTokenHUDButton(){
   game.settings.register("athenas-movement-trail", "addTokenHUDButton", {
     name: "Show Token HUD Button",
     hint: "Adds a button to the token HUD to be able to change movement types.",
+    scope: "world",       // or "world" depending on your use case
+    config: true,          // show in settings UI
+    default: true,
+    type: Boolean,
+  });
+}
+function showSwimClimbAsHalfSpeed(){
+  game.settings.register("athenas-movement-trail", "includeSwimClimb", {
+    name: "Show Swim/Climb Speed",
+    hint: "Shows the Swim/Climb speed in the tokenHUD as half of the default movement speed",
     scope: "world",       // or "world" depending on your use case
     config: true,          // show in settings UI
     default: true,

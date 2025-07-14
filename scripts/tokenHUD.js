@@ -49,13 +49,14 @@ export async function renderTokenHUD(app, [html]){
 }
 
 function cleanSpeedData(speedData){
-  const includeSwimClimb = true
   for(let entry in speedData){
     speedData[entry]["label"] = toTitleCase(entry)
     speedData[entry]["type"] = entry
-    if ((entry === "climb" || entry === "swim") && includeSwimClimb ){
-      if (speedData[entry].speed <= 0)
-        speedData[entry].speed = Math.floor(speedData['walk'].speed /2);
+    if ((entry === "climb" || entry === "swim") && game.settings.get("athenas-movement-trail", "includeSwimClimb") ){
+      if (speedData[entry].speed <= 0){
+        const defaultSpeed = game.settings.get("athenas-movement-trail", "movementPaths").default.label;
+        speedData[entry].speed = Math.floor(speedData[defaultSpeed].speed /2);
+      }
     }
     else if (speedData[entry].speed <= 0){
       delete speedData[entry]
