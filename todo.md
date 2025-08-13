@@ -26,7 +26,7 @@
       - [ ] Implement the functionality for the test populate button
       - [X] Change it so it selects the highest move speed. If there is a tie involving the default speed. Choose the default speed
 - [X] Add a way to decide if the half speed of climbing and swimming is shown on hud.  
-
+- [ ] Implement the ability to reset path tracking for a token. 
 Would be nice 
 - [X] Update module to use sockets instead of each person tracking the state. 
 - [ ] Does not account for large creatures. Will only take the middle of the top left square into account. 
@@ -46,3 +46,4 @@ BUGS:
 - [X] If combatant has not been registered the ruler movement does not work.   
 - [X] Running into walls cause the last space to cost 0 movement
 - [ ] Fix the border changing with the diffrent grid sizes. Should calculate width off of grid size instead of being constant.
+- [ ] Small creatures don't track properly when moved with the arrow keys. Probably a foundry issue. It's weird. 

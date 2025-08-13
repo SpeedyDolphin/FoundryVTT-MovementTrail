@@ -11,6 +11,7 @@ export function setKeybindings(){
   setShowTrailKeybinding(); // Default: V
   setPathCondensingToggleKeybinding(); // Default: B
   setMovementTrackingToggleKeybinding(); // Default: Alt + B
+  setResetPathTrackingKeybinding(); // Default Alt + V
 }
 
 function setShowTrailKeybinding(){
@@ -49,6 +50,18 @@ function setMovementTrackingToggleKeybinding(){
     onDown: () => {
       toggleMovementTracking();
       console.log("Athena's Movement Trail | alt + B Keybinding Triggered");
+    },
+  });
+}
+function setResetPathTrackingKeybinding(){
+  game.keybindings.register("athenas-movement-trail", "resetPathTracking", {
+    name: "Toggle Movement Tracking",
+    hint: "Sometimes the path is wonky this allows a fresh start. Does not clear the origin square.",
+    restricted: false,
+    editable: [{ key: "KeyV", modifiers: ["Alt"] }],
+    onDown: () => {
+      //resetPathTracking();
+      console.log("Athena's Movement Trail | alt + v Keybinding Triggered");
     },
   });
 }

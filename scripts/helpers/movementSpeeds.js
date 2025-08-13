@@ -56,7 +56,7 @@ function parsePaths(unparsedPaths, actor){
         }
     });
     speeds[unparsedPaths.default.label] = parsePath(unparsedPaths.default.path, actor);
-
+    speeds = Object.fromEntries(Object.entries(speeds).filter(([key, value]) => Number.isFinite(value))); //Filter out non-numeric values
     return speeds
 }
 
