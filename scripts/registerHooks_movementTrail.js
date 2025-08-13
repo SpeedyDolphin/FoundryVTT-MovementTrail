@@ -33,7 +33,6 @@ Hooks.on("preUpdateToken", async (token, changes, options, userId) => {
       updateTrail(token.id, changes, userId);
     }
 });
-
 Hooks.on("updateCombat", async (combat, changed) => {
     console.log("Athena's Movement Trail | Update Combat Hook Triggered");
     if(combat.combatant !== undefined) // this is a guard for when no one has rolled initiative but the tracker is advanced anyways.  

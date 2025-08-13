@@ -66,10 +66,15 @@ export async function renderCombatantTrail(combatantId, trail, userId){
     }
 }
 
-function drawTrail(trail, container, color, tokenId){
+async function drawTrail(trail, container, color, tokenId){
     let cost = 0
     for (let i = 0; i < trail.length; i++){
-        cost = Math.round(cost + trail[i].cost ?? 0); // rounding to avoid floating point issues
+        if(i === trail.length-1){ // end of trail we are just estimating what the next movement would cost. 
+            cost = Math.round(cost + canvas.scene.grid.distance);
+            await new Promise((resolve) => setTimeout(resolve, 150)); //wait .2 seconds so the token moves first
+        }
+        else
+            cost = Math.round(cost + trail[i+1]?.cost ?? 0); // rounding to avoid floating point issues
         drawSquare(trail[i].pixel.x, trail[i].pixel.y, color, String(cost), container, (trail[i].cost === 0 && i !== 0))
         movementUsageIndicator(trail[i].pixel.x, trail[i].pixel.y, cost, container, tokenId); 
      }

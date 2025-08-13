@@ -131,11 +131,11 @@ export async function rulerUpdateTrail(tokenId, segments, userId, resultPromise)
     }
     console.log(combatants);
     socket.executeAsGM(saveData, tokenId, combatants[tokenId])
+    rulerMovedCombatants.delete(tokenId); // allow other updates
     socket.executeForEveryone(renderCombatantTrail, tokenId, combatants[tokenId].trail, userId);
     console.log('Update trail from ruler end');
-    rulerMovedCombatants.delete(tokenId); // allow other updates
+    
 }
-
 export async function showTrail(tokenId){
     await loadData();
     if (combatants[tokenId] === undefined) {
