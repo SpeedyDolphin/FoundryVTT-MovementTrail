@@ -27,6 +27,7 @@
       - [X] Change it so it selects the highest move speed. If there is a tie involving the default speed. Choose the default speed
 - [X] Add a way to decide if the half speed of climbing and swimming is shown on hud.  
 - [ ] Implement the ability to reset path tracking for a token. 
+
 Would be nice 
 - [X] Update module to use sockets instead of each person tracking the state. 
 - [ ] Does not account for large creatures. Will only take the middle of the top left square into account. 
