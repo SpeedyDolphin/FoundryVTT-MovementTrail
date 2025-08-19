@@ -17,7 +17,7 @@
     background: rgba(0, 0, 0, 0.6);
     box-shadow: 0 0 15px var(--color-shadow-dark);
     border: 1px solid var(--color-border-dark-3);
-    border-radius: 4px;
+    border-radius: 8px;
     pointer-events: all;
     white-space: nowrap;
 }
@@ -27,8 +27,11 @@
     justify-content: space-between;
     padding-left: 5px; 
     padding-right: 5px;
-    border-radius: 5px;
 
+    border-radius: 5px;
+    border-width: 3px;
+    border-color: transparent;
+    border-style: inset;
 }
 .speed-item:hover{
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -44,8 +47,5 @@
 }
 .activeSpeed {
     /* background: aqua; */
-    border-radius: 5px;
     border-color: cyan;
-    border-width: 3px;
-    border-style: inset;
 }

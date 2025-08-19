@@ -1,6 +1,6 @@
 //Purpose: Add the button to the token HUD and handle all logic that lets the user manipulate their speed
 
-import { getTokenFlags } from "./helpers/movementSpeeds.js";
+import { getTokenFlags, setTokenFlags } from "./helpers/movementSpeeds.js";
 /*
 Specific uses: 
 	{ renderTokenHUD } by registerHooks_movementTrail.js
@@ -32,22 +32,48 @@ export async function renderTokenHUD(app, [html]){
     const flags = await getTokenFlags(app.document._id)
     console.log(flags)
     const speed_multipliers = [0.25, 0.5, 1, 2,3,4];
-    const sidePanel =  $( await renderTemplate("modules/athenas-movement-trail/templates/tokenHUD_menu.hbs", {speedData: cleanSpeedData(flags.speedData), speed_multipliers, currentMovement:flags.currentMovement})).hide();
+    const $sidePanel =  $( await renderTemplate("modules/athenas-movement-trail/templates/tokenHUD_menu.hbs", {speedData: cleanSpeedData(flags.speedData), speed_multipliers, currentMovement:flags.currentMovement})).hide();
+    
+
+    console.log("side panel options?")
     
   
-    console.log(cleanSpeedData(flags.speedData))
+    console.log("Flag data")
     console.log(flags);
-  // Add click behavior
+  // Add click behavior to the hud button
   btn.on("click", () => {
     btn.toggleClass("active");
-    sidePanel.toggle();
+    $sidePanel.toggle();
   });
 
   // Append it to the left-side controls (e.g., below "effects" or "target")
   html.querySelector(".left").appendChild(btn[0])
-  html.querySelector(".left").appendChild(sidePanel[0])
-}
+  html.querySelector(".left").appendChild($sidePanel[0])
 
+  sidePanelListeners(flags)
+  
+}
+function sidePanelListeners(flags){
+  $(".speed-panel").on("click", ".speed-item", function (event) {
+    console.log("Clicked", $(this).data("speed_type"));
+    //Remove the active class from the previous element
+    $(".speed-panel").find(".speed-item").removeClass("activeSpeed");
+
+    // Add active class back to the parent of the changed select
+    $(this).closest(".speed-item").addClass("activeSpeed");
+
+    //Bookkeeping 
+    flags.currentMovement = $(this).data("speed_type").toLowerCase()
+    //Note to future self - Flags is a reference so we don't need to manually call setFlag to update the flag 
+  });  
+
+  $(".speed-panel").on("change", ".speed-select", function (event) {
+      console.log("Multiplier changed to:", $(this).val());
+      //Bookkeeping 
+      let speedType = $(this).closest(".speed-item").data("speed_type").toLowerCase();
+      flags.speedData[speedType]['multiplier'] = Number($(this).val())
+  });
+}
 function cleanSpeedData(speedData){
   for(let entry in speedData){
     speedData[entry]["label"] = toTitleCase(entry)
