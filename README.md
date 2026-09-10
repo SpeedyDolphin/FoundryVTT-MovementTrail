@@ -1,7 +1,7 @@
 
 # Athena's Token Trail 
 A Foundry VTT module that shows a trail for the movement a token does in a round of combat.  
-
+Note: Not finsihed. See the dev branch for the most up to date version. Built on Foundry v12. I intend to make it compatable with later versions when finsihed.  
 ![image](https://raw.githubusercontent.com/SpeedyDolphin/FoundryVTT-MovementTrail/refs/heads/dev/images/ModuleDemo.png)
 
 ## Usage
