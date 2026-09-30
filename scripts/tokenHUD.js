@@ -1,6 +1,6 @@
 //Purpose: Add the button to the token HUD and handle all logic that lets the user manipulate their speed
 
-import { getTokenFlags, setTokenFlags } from "./helpers/movementSpeeds.js";
+import { getTokenFlags } from "./helpers/movementSpeeds.js";
 /*
 Specific uses: 
 	{ renderTokenHUD } by registerHooks_movementTrail.js
